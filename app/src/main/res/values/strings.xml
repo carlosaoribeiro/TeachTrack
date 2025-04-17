@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TeachTrack</string>
+    <string name="data_de_cadastro_dd_mm_aaaa">Data de Cadastro (DD/MM/AAAA)</string>
+    <string name="data_de_nascimento_dd_mm_aaaa">Data de Nascimento (DD/MM/AAAA)</string>
+    <string name="tipo_de_aluno">Tipo de Aluno:</string>
+    <string name="mensal">Mensal</string>
+    <string name="di_ria">Diária</string>
+    <string name="salvar">Salvar</string>
+    <string name="telefone_00_00000_0000">Telefone (00)-00000-0000</string>
+    <string name="sobrenome">Sobrenome</string>
+    <string name="nome">Nome</string>
+    <string name="cadastre_seu_aluno">Cadastre Seu Aluno</string>
+    <string name="ver_alunos_cadastrados">Ver Alunos Cadastrados</string>
 </resources>
