@@ -1,78 +1,105 @@
 # 🎓 TeachTrack
 
-Aplicativo Android para gerenciamento de aulas particulares, desenvolvido para professores de idiomas. Permite o cadastro de alunos, agendamento de aulas (diárias ou mensais), visualização de agendas e edição de aulas, com suporte ao Firebase Firestore para armazenamento em nuvem.
+An Android application to help English teachers manage their student schedules, including class registrations, recurring lessons, and Firebase integration.
 
----
+✅ Features
+🧑‍🏫 Register and manage students with personal and contact information
 
-## ✅ Funcionalidades
+🗓️ Schedule daily or recurring weekly classes
 
-- 👨‍🎓 Cadastro completo de alunos com nome, sobrenome, e-mail, telefone e tipo (diário/mensal)
-- 🗓 Agendamento de aulas com seleção de datas e horários
-- 🔁 Suporte a aulas recorrentes para alunos mensais com seleção por dias da semana
-- 🔍 Busca de aluno com preenchimento automático do e-mail
-- 📆 Tela de listagem de aulas agendadas com filtro e organização por aluno
-- ✏️ Edição de aulas com toque longo no card (4 segundos)
-- 🧠 Interface intuitiva e adaptada para o dia a dia do professor particular
+🔁 Automatically create class recurrences for monthly students
 
----
+🔍 Search for students by name with autocomplete
 
-## 🔧 Tecnologias Utilizadas
+✉️ Auto-fill student email when selected
 
-- Java
-- Android SDK (API 24+)
-- Firebase Firestore
-- Material Design
-- RecyclerView + Adapter customizado
-- AutoCompleteTextView com integração ao Firestore
+📅 Native date picker for scheduling
 
----
+🧮 Table layout for setting fixed weekly class times
 
-## 🧪 Requisitos
+🧾 List of scheduled classes with search and filtering
 
-- Android Studio (recomendado: Hedgehog ou mais recente)
-- SDK Mínimo: 24 (Android 7.0)
-- Permissões:
-  - `INTERNET`
+📤 Stores all data in Firebase Firestore
 
----
+🧠 Long-press (4 seconds) on a card to enter edit mode (WIP)
 
-## 🚀 Como Usar
+🧪 Requirements
+Android Studio (recommended: Hedgehog or newer)
 
-1. Clone o repositório e abra no Android Studio
-2. Configure o Firebase com o `google-services.json`
-3. Execute o app no emulador ou dispositivo real
-4. Cadastre alunos, agende aulas e visualize sua agenda de forma intuitiva
+Minimum Android SDK: 24
 
----
+Firebase Firestore enabled in your Firebase project
 
-## 🧱 Estrutura de Telas
+Permissions required:
 
-- `MainActivity`: Tela inicial com botões de navegação
-- `CadastroAlunoActivity`: Cadastro ou edição de alunos
-- `ListarAlunosActivity`: Lista de alunos com busca e acesso à edição
-- `AgendaActivity`: Tela de agendamento de aulas com suporte a recorrência
-- `ListarAulasActivity`: Tela de listagem de aulas com cards e organização por aluno
+INTERNET
 
----
+ACCESS_NETWORK_STATE
 
-## 📱 Experiência do Usuário
+🚀 How to Use
+Install the app on your Android device
 
-- Uso de `AutoCompleteTextView` para facilitar a seleção de alunos
-- Cards estilizados para exibir aulas agendadas
-- Layout responsivo e preparado para teclado na tela
-- Feedbacks visuais com `Dialog` para operações de sucesso ou erro
+Register a student in the Student Registration screen
 
----
+Go to Schedule and select a student
 
-## 🔒 Privacidade
+Choose the class type: Daily or Monthly
 
-Todos os dados dos alunos e aulas são armazenados apenas no Firestore do próprio usuário, sem qualquer exposição externa ou integração com terceiros.
+Select the date or define weekly recurrence times
 
----
+View all scheduled classes in the Classes screen
 
-## 📄 Licença
+🧱 App Screens
+MainActivity: main menu
 
-Projeto de uso educacional e pessoal, livre para modificação e adaptação em contextos similares. Para distribuição comercial, entre em contato com o autor.
+CadastroAlunoActivity: student registration
 
----
+ListarAlunosActivity: student listing and search
+
+AgendaActivity: schedule classes and manage recurrence
+
+ListarAulasActivity: list of scheduled classes with filters
+
+🛠️ Technologies Used
+Java
+
+MVVM Architecture
+
+Firebase Firestore
+
+RecyclerView with custom adapters
+
+AutoCompleteTextView
+
+DatePickerDialog
+
+TableLayout
+
+Material Design 3 components
+
+📁 Data Structure (Firestore)
+alunos (students collection)
+
+nome, sobrenome, email, tipoAluno, dataCadastro, etc.
+
+aulas (classes collection)
+
+aluno, email, tipo, data, hora, horariosSemana
+
+📌 Notes
+The project supports both daily and monthly students
+
+Classes are grouped visually by cards
+
+Schedule recurrence only applies to monthly students
+
+Currently supports simple email field; can be expanded with notifications
+
+🔐 Security & Privacy
+All data is securely stored in Firebase Firestore and is tied to the user’s project configuration. No data is shared externally.
+
+📄 License
+This project is for educational use and can be freely adapted for non-commercial purposes. For commercial use, please contact the author.
+
+
 
