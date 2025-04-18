@@ -11,4 +11,5 @@
     <string name="nome">Nome</string>
     <string name="cadastre_seu_aluno">Cadastre Seu Aluno</string>
     <string name="ver_alunos_cadastrados">Ver Alunos Cadastrados</string>
+    <string name="listar_aluno">Listar Aluno</string>
 </resources>

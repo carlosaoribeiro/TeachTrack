@@ -24,12 +24,13 @@
             </intent-filter>
         </activity>
 
-        <!-- Tela de cadastro de aluno -->
+        <!-- Telas do app -->
         <activity android:name=".CadastroAlunoActivity" />
-
-        <!-- Tela de listagem de alunos -->
         <activity android:name=".ListarAlunosActivity" />
+        <activity android:name=".AgendaActivity" />
+        <activity android:name=".ListarAulasActivity" />
 
     </application>
+
 
 </manifest>
