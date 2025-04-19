@@ -1,25 +1,36 @@
 package com.carlosribeiro.teachtrack.model;
 
+import com.google.firebase.firestore.Exclude;
+
+import java.io.Serializable;
 import java.util.Map;
 
-public class Aula {
+public class Aula implements Serializable {
+
+    @Exclude
+    private String id;
 
     private String aluno;
     private String email;
-    private String tipo; // "Diário" ou "Mensal"
-
-    // Para tipo Diário
+    private String tipo;
     private String data;
     private String hora;
-
-    // Para tipo Mensal
-    private Map<String, String> horariosSemana; // ex: "segunda": "10:00"
+    private Map<String, String> horariosSemana;
 
     public Aula() {
-        // Construtor vazio exigido pelo Firestore
+        // Firestore requires empty constructor
     }
 
-    // Getters e Setters
+    // 🔑 Getters e Setters
+    @Exclude
+    public String getId() {
+        return id;
+    }
+
+    @Exclude
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAluno() {
         return aluno;
@@ -67,9 +78,5 @@ public class Aula {
 
     public void setHorariosSemana(Map<String, String> horariosSemana) {
         this.horariosSemana = horariosSemana;
-    }
-
-    public char[] getDiaSemana() {
-        return new char[0];
     }
 }

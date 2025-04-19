@@ -1,24 +1,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:padding="16dp">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
+    <!-- 🏷️ Título da tela -->
     <TextView
+        android:id="@+id/txtTituloListagem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Aulas Agendadas"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="12dp" />
 
+    <!-- 🔍 Campo de busca -->
     <EditText
         android:id="@+id/editBuscarAula"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Buscar por aluno..." />
+        android:hint="Buscar por aluno..."
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:padding="10dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginBottom="12dp" />
 
+    <!-- 📋 Lista de aulas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerAulas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp"
+        android:paddingBottom="20dp" />
 </LinearLayout>

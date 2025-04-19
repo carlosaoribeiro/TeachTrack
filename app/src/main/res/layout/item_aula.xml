@@ -1,48 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="6dp">
+    android:background="@android:color/white"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/txtAluno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nome do Aluno"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/txtTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo"
+        android:textColor="#666666"
+        android:layout_marginTop="4dp" />
+
+    <TableLayout
+        android:id="@+id/tabelaDiasHorarios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Nome do aluno -->
-        <TextView
-            android:id="@+id/txtAluno"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nome do Aluno"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
-
-        <!-- Tipo de aluno -->
-        <TextView
-            android:id="@+id/txtTipo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tipo: Mensal"
-            android:layout_marginTop="4dp"
-            android:textColor="@android:color/darker_gray" />
-
-        <!-- Tabela de dias e horários -->
-        <TableLayout
-            android:id="@+id/tabelaDiasHorarios"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:stretchColumns="1">
-
-            <!-- As linhas reais serão adicionadas dinamicamente no adapter -->
-
-        </TableLayout>
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+        android:layout_marginTop="8dp"
+        android:stretchColumns="1" />
+</LinearLayout>

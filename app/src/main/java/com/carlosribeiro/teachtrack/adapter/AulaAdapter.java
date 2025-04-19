@@ -1,13 +1,16 @@
 package com.carlosribeiro.teachtrack.adapter;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.carlosribeiro.teachtrack.R;
 import com.carlosribeiro.teachtrack.model.Aula;
 
@@ -17,6 +20,16 @@ import java.util.*;
 public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder> {
 
     private final List<Aula> listaAulas;
+
+    public interface OnAulaLongClickListener {
+        void onAulaLongClick(Aula aula);
+    }
+
+    private OnAulaLongClickListener longClickListener;
+
+    public void setOnAulaLongClickListener(OnAulaLongClickListener listener) {
+        this.longClickListener = listener;
+    }
 
     public AulaAdapter(List<Aula> listaAulas) {
         this.listaAulas = listaAulas;
@@ -35,6 +48,16 @@ public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder
         holder.txtAluno.setText(aula.getAluno());
         holder.txtTipo.setText("Tipo: " + aula.getTipo());
         holder.tabelaHorarios.removeAllViews();
+
+        // 🔁 Clique longo com delay de 4 segundos para edição
+        holder.itemView.setOnLongClickListener(view -> {
+            new Handler().postDelayed(() -> {
+                if (longClickListener != null) {
+                    longClickListener.onAulaLongClick(listaAulas.get(holder.getAdapterPosition()));
+                }
+            }, 4000);
+            return true;
+        });
 
         if ("Mensal".equals(aula.getTipo())) {
             Map<String, String> mapa = aula.getHorariosSemana();
