@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#111111"
+    android:gravity="center">
+
+    <!-- Container central com logo, texto e loading -->
+    <LinearLayout
+        android:id="@+id/containerLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- 🎓 Logo/chapeu -->
+        <ImageView
+            android:id="@+id/logoTeachTrack"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/logo_transparente"
+            android:contentDescription="@string/app_name"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 🏷️ Texto TeachTrack -->
+        <TextView
+            android:id="@+id/textTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TeachTrack"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <!-- ⏳ Loading -->
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>
