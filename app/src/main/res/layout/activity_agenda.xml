@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Agendar Aula"
-            android:layout_gravity="center"
             android:textColor="@android:color/black"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -83,17 +82,24 @@
                 android:text="Mensal" />
         </RadioGroup>
 
-        <!-- ⏰ Horário da aula (diário) -->
+        <!-- ⏰ Label e horário do aluno diário -->
+        <TextView
+            android:id="@+id/labelHoraDiaria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Horário da Aula"
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
+
         <EditText
-            android:id="@+id/editHoraDiario"
+            android:id="@+id/editHoraDiaria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Horário da aula"
-            android:visibility="gone"
-            android:focusable="false"
+            android:hint="Ex: 10:00"
             android:inputType="none"
+            android:focusable="false"
             android:background="@android:drawable/edit_text"
-            android:layout_marginTop="8dp" />
+            android:visibility="gone" />
 
         <!-- 🔁 Label de recorrência -->
         <TextView
@@ -114,78 +120,63 @@
             android:visibility="gone">
 
             <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Segunda" />
+                <TextView android:text="Segunda" />
                 <EditText
                     android:id="@+id/editHoraSeg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text" />
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Terça" />
+                <TextView android:text="Terça" />
                 <EditText
                     android:id="@+id/editHoraTer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text" />
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quarta" />
+                <TextView android:text="Quarta" />
                 <EditText
                     android:id="@+id/editHoraQua"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text" />
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quinta" />
+                <TextView android:text="Quinta" />
                 <EditText
                     android:id="@+id/editHoraQui"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text" />
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sexta" />
+                <TextView android:text="Sexta" />
                 <EditText
                     android:id="@+id/editHoraSex"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text" />
+                    android:background="@android:drawable/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </TableRow>
         </TableLayout>
 

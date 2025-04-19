@@ -7,20 +7,22 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.carlosribeiro.teachtrack.model.Aluno;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class AgendaActivity extends AppCompatActivity {
 
     private AutoCompleteTextView autoAluno;
-    private EditText editEmailAluno, editDataAula, editHoraDiario;
+    private EditText editEmailAluno, editDataAula, editHoraDiaria;
     private RadioGroup radioTipoAluno;
     private RadioButton radioMensal, radioDiario;
-    private TextView txtLabelRecorrencia;
+    private TextView txtLabelRecorrencia, labelHoraDiaria;
     private TableLayout tabelaRecorrencia;
     private EditText editHoraSeg, editHoraTer, editHoraQua, editHoraQui, editHoraSex;
     private Button btnSalvarAula;
@@ -28,6 +30,7 @@ public class AgendaActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private final Calendar calendario = Calendar.getInstance();
     private final Map<String, Aluno> mapaAlunosPorNome = new HashMap<>();
+    private String aulaId = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +42,8 @@ public class AgendaActivity extends AppCompatActivity {
         autoAluno = findViewById(R.id.autoAluno);
         editEmailAluno = findViewById(R.id.editEmailAluno);
         editDataAula = findViewById(R.id.editDataAula);
-        editHoraDiario = findViewById(R.id.editHoraDiario);
+        editHoraDiaria = findViewById(R.id.editHoraDiaria);
+        labelHoraDiaria = findViewById(R.id.labelHoraDiaria);
         radioTipoAluno = findViewById(R.id.radioTipoAluno);
         radioDiario = findViewById(R.id.radioDiario);
         radioMensal = findViewById(R.id.radioMensal);
@@ -53,14 +57,13 @@ public class AgendaActivity extends AppCompatActivity {
         btnSalvarAula = findViewById(R.id.btnSalvarAula);
 
         configurarDatePicker();
-        configurarRadioButtons();
-        configurarHora(editHoraDiario);
-        configurarHora(editHoraSeg);
-        configurarHora(editHoraTer);
-        configurarHora(editHoraQua);
-        configurarHora(editHoraQui);
-        configurarHora(editHoraSex);
+        configurarTimePickers();
+        configurarTipoAluno();
         carregarAlunos();
+
+        aulaId = getIntent().getStringExtra("aulaId");
+        if (aulaId != null) preencherCamposEdicao();
+
         btnSalvarAula.setOnClickListener(v -> salvarAula());
     }
 
@@ -70,40 +73,36 @@ public class AgendaActivity extends AppCompatActivity {
             int mes = calendario.get(Calendar.MONTH);
             int dia = calendario.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog dialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
                 calendario.set(year, month, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                editDataAula.setText(sdf.format(calendario.getTime()));
-            }, ano, mes, dia);
-
-            dialog.show();
+                editDataAula.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(calendario.getTime()));
+            }, ano, mes, dia).show();
         });
     }
 
-    private void configurarHora(EditText campo) {
-        campo.setOnClickListener(v -> {
-            Calendar cal = Calendar.getInstance();
-            int hora = cal.get(Calendar.HOUR_OF_DAY);
-            int minuto = cal.get(Calendar.MINUTE);
+    private void configurarTimePickers() {
+        for (EditText campo : Arrays.asList(editHoraDiaria, editHoraSeg, editHoraTer, editHoraQua, editHoraQui, editHoraSex)) {
+            campo.setOnClickListener(v -> {
+                Calendar cal = Calendar.getInstance();
+                int hora = cal.get(Calendar.HOUR_OF_DAY);
+                int minuto = cal.get(Calendar.MINUTE);
 
-            TimePickerDialog picker = new TimePickerDialog(this, (view, hourOfDay, minute1) -> {
-                campo.setText(String.format(Locale.US, "%02d:%02d", hourOfDay, minute1));
-            }, hora, minuto, true);
-            picker.show();
-        });
+                new TimePickerDialog(this, (view, h, m) -> {
+                    campo.setText(String.format(Locale.US, "%02d:%02d", h, m));
+                }, hora, minuto, true).show();
+            });
+        }
     }
 
-    private void configurarRadioButtons() {
+    private void configurarTipoAluno() {
         radioTipoAluno.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.radioMensal) {
-                tabelaRecorrencia.setVisibility(View.VISIBLE);
-                txtLabelRecorrencia.setVisibility(View.VISIBLE);
-                editHoraDiario.setVisibility(View.GONE);
-            } else {
-                tabelaRecorrencia.setVisibility(View.GONE);
-                txtLabelRecorrencia.setVisibility(View.GONE);
-                editHoraDiario.setVisibility(View.VISIBLE);
-            }
+            boolean isMensal = checkedId == R.id.radioMensal;
+            boolean isDiario = checkedId == R.id.radioDiario;
+
+            txtLabelRecorrencia.setVisibility(isMensal ? View.VISIBLE : View.GONE);
+            tabelaRecorrencia.setVisibility(isMensal ? View.VISIBLE : View.GONE);
+            labelHoraDiaria.setVisibility(isDiario ? View.VISIBLE : View.GONE);
+            editHoraDiaria.setVisibility(isDiario ? View.VISIBLE : View.GONE);
         });
     }
 
@@ -115,33 +114,46 @@ public class AgendaActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot doc : result) {
                         Aluno aluno = doc.toObject(Aluno.class);
                         aluno.setId(doc.getId());
-
-                        String nome = aluno.getNome() != null ? aluno.getNome() : "";
-                        String sobrenome = aluno.getSobrenome() != null ? aluno.getSobrenome() : "";
-                        String nomeCompleto = nome + " " + sobrenome;
-
-                        nomes.add(nomeCompleto.trim());
-                        mapaAlunosPorNome.put(nomeCompleto.trim(), aluno);
+                        String nomeCompleto = aluno.getNome() + " " + aluno.getSobrenome();
+                        nomes.add(nomeCompleto);
+                        mapaAlunosPorNome.put(nomeCompleto, aluno);
                     }
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                            android.R.layout.simple_dropdown_item_1line, nomes);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, nomes);
                     autoAluno.setAdapter(adapter);
                     autoAluno.setThreshold(1);
 
-                    autoAluno.setOnFocusChangeListener((v, hasFocus) -> {
-                        if (hasFocus) autoAluno.showDropDown();
-                    });
-
                     autoAluno.setOnItemClickListener((parent, view, position, id) -> {
-                        String nomeSelecionado = parent.getItemAtPosition(position).toString();
-                        Aluno alunoSelecionado = mapaAlunosPorNome.get(nomeSelecionado);
-                        if (alunoSelecionado != null) {
-                            editEmailAluno.setText(alunoSelecionado.getEmail());
-                        }
+                        Aluno aluno = mapaAlunosPorNome.get(parent.getItemAtPosition(position).toString());
+                        if (aluno != null) editEmailAluno.setText(aluno.getEmail());
                     });
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Erro ao carregar alunos", Toast.LENGTH_SHORT).show());
+                });
+    }
+
+    private void preencherCamposEdicao() {
+        autoAluno.setText(getIntent().getStringExtra("aluno"));
+        editEmailAluno.setText(getIntent().getStringExtra("email"));
+        String tipo = getIntent().getStringExtra("tipo");
+
+        if ("Mensal".equals(tipo)) {
+            radioMensal.setChecked(true);
+            Map<String, EditText> campos = new HashMap<>();
+            campos.put("segunda", editHoraSeg);
+            campos.put("terca", editHoraTer);
+            campos.put("quarta", editHoraQua);
+            campos.put("quinta", editHoraQui);
+            campos.put("sexta", editHoraSex);
+
+            for (Map.Entry<String, EditText> entry : campos.entrySet()) {
+                String valor = getIntent().getStringExtra("horario_" + entry.getKey());
+                if (valor != null) entry.getValue().setText(valor);
+            }
+
+        } else {
+            radioDiario.setChecked(true);
+            editDataAula.setText(getIntent().getStringExtra("data"));
+            editHoraDiaria.setText(getIntent().getStringExtra("hora"));
+        }
     }
 
     private void salvarAula() {
@@ -150,7 +162,7 @@ public class AgendaActivity extends AppCompatActivity {
         String dataAula = editDataAula.getText().toString().trim();
 
         if (TextUtils.isEmpty(nomeAluno) || TextUtils.isEmpty(dataAula)) {
-            Toast.makeText(this, "Preencha os campos obrigatórios.", Toast.LENGTH_SHORT).show();
+            mostrarDialogo("Erro", "Preencha os campos obrigatórios.");
             return;
         }
 
@@ -170,16 +182,28 @@ public class AgendaActivity extends AppCompatActivity {
         } else {
             dados.put("tipo", "Diário");
             dados.put("data", dataAula);
-            dados.put("hora", editHoraDiario.getText().toString().trim());
+            dados.put("hora", editHoraDiaria.getText().toString());
         }
 
-        db.collection("aulas")
-                .add(dados)
-                .addOnSuccessListener(docRef -> {
-                    Toast.makeText(this, "Aula salva com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish();
+        if (aulaId != null) {
+            db.collection("aulas").document(aulaId)
+                    .set(dados)
+                    .addOnSuccessListener(aVoid -> mostrarDialogo("Sucesso", "Aula atualizada com sucesso!"))
+                    .addOnFailureListener(e -> mostrarDialogo("Erro", "Falha ao atualizar aula: " + e.getMessage()));
+        } else {
+            db.collection("aulas").add(dados)
+                    .addOnSuccessListener(doc -> mostrarDialogo("Sucesso", "Aula salva com sucesso!"))
+                    .addOnFailureListener(e -> mostrarDialogo("Erro", "Erro ao salvar aula: " + e.getMessage()));
+        }
+    }
+
+    private void mostrarDialogo(String titulo, String mensagem) {
+        new AlertDialog.Builder(this)
+                .setTitle(titulo)
+                .setMessage(mensagem)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    if (titulo.equals("Sucesso")) finish();
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Erro ao salvar aula: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .show();
     }
 }
