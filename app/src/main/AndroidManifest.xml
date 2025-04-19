@@ -40,6 +40,9 @@
         <activity android:name=".ListarAlunosActivity" />
         <activity android:name=".AgendaActivity" />
         <activity android:name=".ListarAulasActivity" />
+        <activity android:name=".CadastroProfessorActivity" />
+        <activity android:name=".LoginActivity" />
+
 
     </application>
 </manifest>

@@ -1,37 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#111111"
     tools:context=".MainActivity">
 
+        <!-- Label TeachTrack alinhado à esquerda -->
+        <TextView
+            android:id="@+id/txtTituloMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TeachTrack"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btnListarAlunos"
+        <!-- Card: Agendar Aula -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAgendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/listar_aluno"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="#272727"
+            app:layout_constraintTop_toBottomOf="@id/txtTituloMain"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btnAgendarAula"
+                <Button
+                    android:id="@+id/btnAgendarAula"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Agendar Aula"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#444444"
+                    android:padding="16dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card: Listar Alunos -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardListar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Agendar Aula"
-            app:layout_constraintBottom_toTopOf="@+id/btnListarAlunos" />
+            android:layout_margin="16dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="#272727"
+            app:layout_constraintTop_toBottomOf="@id/cardAgendar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+                <Button
+                    android:id="@+id/btnListarAlunos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Listar Alunos"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#444444"
+                    android:padding="16dp" />
+        </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/btnVerAulas"
+        <!-- Card: Ver Aulas -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardVerAulas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ver Aulas Agendadas"
-            app:layout_constraintTop_toBottomOf="@+id/btnListarAlunos" />
+            android:layout_margin="16dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="#272727"
+            app:layout_constraintTop_toBottomOf="@id/cardListar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+                <Button
+                    android:id="@+id/btnVerAulas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ver Aulas Agendadas"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#444444"
+                    android:padding="16dp" />
+        </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
