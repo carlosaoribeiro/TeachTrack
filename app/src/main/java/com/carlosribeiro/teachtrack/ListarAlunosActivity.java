@@ -14,27 +14,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.carlosribeiro.teachtrack.adapter.AlunoAdapter;
 import com.carlosribeiro.teachtrack.model.Aluno;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListarAlunosActivity extends AppCompatActivity {
 
-    // 🚩 Constantes
     private static final int REQUEST_CADASTRO = 1;
 
-    // 🔗 Firebase
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    // 📦 Componentes e dados
     private RecyclerView recyclerView;
     private EditText editBuscar;
     private AlunoAdapter adapter;
     private List<Aluno> listaAlunos = new ArrayList<>();
 
-    // ▶️ Ciclo de vida
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +41,9 @@ public class ListarAlunosActivity extends AppCompatActivity {
 
         inicializarComponentes();
         configurarListeners();
-        carregarAlunos();
+        escutarAlteracoesAlunos(); // 🔁 Escuta alterações em tempo real
     }
 
-    // 🧱 Inicialização da UI
     private void inicializarComponentes() {
         recyclerView = findViewById(R.id.recyclerAlunos);
         editBuscar = findViewById(R.id.editBuscar);
@@ -55,9 +53,7 @@ public class ListarAlunosActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    // 🎯 Listeners (busca, FAB, clique longo)
     private void configurarListeners() {
-        // Busca
         editBuscar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
@@ -67,34 +63,36 @@ public class ListarAlunosActivity extends AppCompatActivity {
             }
         });
 
-        // FAB
         FloatingActionButton fab = findViewById(R.id.fabCadastrar);
         fab.setOnClickListener(view -> abrirCadastro(null));
 
-        // Clique longo
         adapter.setOnAlunoLongClickListener(this::abrirCadastro);
     }
 
-    // 🔁 Carrega dados do Firestore
-    private void carregarAlunos() {
+    // 🔁 Firestore Listener em tempo real
+    private void escutarAlteracoesAlunos() {
         db.collection("alunos")
-                .get()
-                .addOnSuccessListener(result -> {
-                    listaAlunos.clear();
-                    for (QueryDocumentSnapshot doc : result) {
-                        Aluno aluno = doc.toObject(Aluno.class);
-                        aluno.setId(doc.getId()); // 🔑 Necessário para edição
-                        listaAlunos.add(aluno);
-                    }
-                    adapter = new AlunoAdapter(listaAlunos);
-                    recyclerView.setAdapter(adapter);
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null || snapshots == null) return;
 
-                    // Reanexa listener de clique longo após recriar o adapter
-                    adapter.setOnAlunoLongClickListener(this::abrirCadastro);
+                        listaAlunos.clear();
+                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                            Aluno aluno = doc.toObject(Aluno.class);
+                            if (aluno != null) {
+                                aluno.setId(doc.getId());
+                                listaAlunos.add(aluno);
+                            }
+                        }
+
+                        adapter = new AlunoAdapter(listaAlunos);
+                        recyclerView.setAdapter(adapter);
+                        adapter.setOnAlunoLongClickListener(ListarAlunosActivity.this::abrirCadastro);
+                    }
                 });
     }
 
-    // ➕ Abre tela de cadastro/edição
     private void abrirCadastro(@Nullable Aluno aluno) {
         Intent intent = new Intent(this, CadastroAlunoActivity.class);
 
@@ -112,12 +110,12 @@ public class ListarAlunosActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CADASTRO);
     }
 
-    // 🔄 Atualiza lista ao voltar do cadastro
+    // 🔄 Pode remover se quiser, já não é necessário com listener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CADASTRO && resultCode == RESULT_OK) {
-            carregarAlunos();
+            // carregarAlunos(); ⛔️ não precisa mais com snapshotListener
         }
     }
 }

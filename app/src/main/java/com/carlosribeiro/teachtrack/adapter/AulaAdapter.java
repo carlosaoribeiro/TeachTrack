@@ -1,18 +1,17 @@
 package com.carlosribeiro.teachtrack.adapter;
 
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.view.*;
+import android.widget.*;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.carlosribeiro.teachtrack.R;
 import com.carlosribeiro.teachtrack.model.Aula;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,12 +19,11 @@ import java.util.*;
 public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder> {
 
     private final List<Aula> listaAulas;
+    private OnAulaLongClickListener longClickListener;
 
     public interface OnAulaLongClickListener {
         void onAulaLongClick(Aula aula);
     }
-
-    private OnAulaLongClickListener longClickListener;
 
     public void setOnAulaLongClickListener(OnAulaLongClickListener listener) {
         this.longClickListener = listener;
@@ -45,57 +43,68 @@ public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder
     @Override
     public void onBindViewHolder(@NonNull AulaViewHolder holder, int position) {
         Aula aula = listaAulas.get(position);
+        Context context = holder.itemView.getContext();
+
         holder.txtAluno.setText(aula.getAluno());
         holder.txtTipo.setText("Tipo: " + aula.getTipo());
         holder.tabelaHorarios.removeAllViews();
 
-        // 🔁 Clique longo com delay de 4 segundos para edição
-        holder.itemView.setOnLongClickListener(view -> {
-            new Handler().postDelayed(() -> {
-                if (longClickListener != null) {
-                    longClickListener.onAulaLongClick(listaAulas.get(holder.getAdapterPosition()));
-                }
-            }, 4000);
-            return true;
+        holder.btnEditar.setOnClickListener(v -> {
+            if (longClickListener != null) {
+                longClickListener.onAulaLongClick(aula);
+            }
+        });
+
+        holder.btnExcluir.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("Confirmar exclusão")
+                    .setMessage("Deseja realmente excluir esta aula?")
+                    .setPositiveButton("Sim", (dialog, which) -> excluirAula(aula, holder.getAdapterPosition(), context))
+                    .setNegativeButton("Cancelar", null)
+                    .show();
         });
 
         if ("Mensal".equals(aula.getTipo())) {
             Map<String, String> mapa = aula.getHorariosSemana();
-            List<String> ordem = Arrays.asList("segunda", "terca", "quarta", "quinta", "sexta");
 
-            if (mapa != null && !mapa.isEmpty()) {
-                for (String dia : ordem) {
-                    if (mapa.containsKey(dia)) {
-                        TableRow linha = new TableRow(holder.itemView.getContext());
+            if (mapa != null) {
+                List<String> ordemReal = new ArrayList<>(mapa.keySet());
+                ordemReal.sort(Comparator.comparing(dia -> getDataObjeto(getProximaData(dia))));
 
-                        TextView txtDia = new TextView(holder.itemView.getContext());
-                        txtDia.setText(capitalize(dia));
-                        txtDia.setPadding(0, 0, 48, 0);
+                for (String dia : ordemReal) {
+                    TableRow linha = new TableRow(context);
 
-                        TextView txtHora = new TextView(holder.itemView.getContext());
-                        String hora = mapa.get(dia);
-                        txtHora.setText(hora);
-                        txtHora.setPadding(0, 0, 48, 0);
+                    TextView txtDia = new TextView(context);
+                    txtDia.setText(capitalize(dia));
+                    txtDia.setPadding(0, 0, 48, 0);
+                    txtDia.setTextColor(Color.WHITE);
 
-                        TextView txtData = new TextView(holder.itemView.getContext());
-                        txtData.setText(getProximaData(dia));
+                    TextView txtHora = new TextView(context);
+                    txtHora.setText(mapa.get(dia));
+                    txtHora.setPadding(0, 0, 48, 0);
+                    txtHora.setTextColor(Color.WHITE);
 
-                        linha.addView(txtDia);
-                        linha.addView(txtHora);
-                        linha.addView(txtData);
-                        holder.tabelaHorarios.addView(linha);
-                    }
+                    TextView txtData = new TextView(context);
+                    txtData.setText(getProximaData(dia));
+                    txtData.setTextColor(Color.WHITE);
+
+                    linha.addView(txtDia);
+                    linha.addView(txtHora);
+                    linha.addView(txtData);
+                    holder.tabelaHorarios.addView(linha);
                 }
             }
         } else {
-            TableRow linha = new TableRow(holder.itemView.getContext());
+            TableRow linha = new TableRow(context);
 
-            TextView txtData = new TextView(holder.itemView.getContext());
+            TextView txtData = new TextView(context);
             txtData.setText(aula.getData());
             txtData.setPadding(0, 0, 48, 0);
+            txtData.setTextColor(Color.WHITE);
 
-            TextView txtHora = new TextView(holder.itemView.getContext());
+            TextView txtHora = new TextView(context);
             txtHora.setText(aula.getHora());
+            txtHora.setTextColor(Color.WHITE);
 
             linha.addView(txtData);
             linha.addView(txtHora);
@@ -103,9 +112,18 @@ public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return listaAulas.size();
+    private void excluirAula(Aula aula, int posicao, Context context) {
+        FirebaseFirestore.getInstance().collection("aulas")
+                .document(aula.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    listaAulas.remove(posicao);
+                    notifyItemRemoved(posicao);
+                    Toast.makeText(context, "Aula excluída com sucesso", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Erro ao excluir aula: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private String capitalize(String texto) {
@@ -134,8 +152,22 @@ public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder
         return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(hoje.getTime());
     }
 
+    private Date getDataObjeto(String dataStr) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(dataStr);
+        } catch (Exception e) {
+            return new Date();
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return listaAulas.size();
+    }
+
     static class AulaViewHolder extends RecyclerView.ViewHolder {
-        TextView txtAluno, txtTipo;
+        TextView txtAluno, txtTipo, btnEditar;
+        ImageButton btnExcluir;
         TableLayout tabelaHorarios;
 
         public AulaViewHolder(@NonNull View itemView) {
@@ -143,6 +175,8 @@ public class AulaAdapter extends RecyclerView.Adapter<AulaAdapter.AulaViewHolder
             txtAluno = itemView.findViewById(R.id.txtAluno);
             txtTipo = itemView.findViewById(R.id.txtTipo);
             tabelaHorarios = itemView.findViewById(R.id.tabelaDiasHorarios);
+            btnEditar = itemView.findViewById(R.id.btnEditar);
+            btnExcluir = itemView.findViewById(R.id.btnExcluir);
         }
     }
 }

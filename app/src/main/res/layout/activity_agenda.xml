@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0B132B"
     android:padding="20dp">
 
     <LinearLayout
@@ -8,59 +9,75 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- 🏣 Título da tela -->
         <TextView
             android:id="@+id/txtTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="Agendar Aula"
-            android:textColor="@android:color/black"
+            android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold" />
 
-        <!-- 🔍 AutoComplete para aluno -->
         <AutoCompleteTextView
             android:id="@+id/autoAluno"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Digite ou selecione um aluno" />
+            android:layout_height="41dp"
+            android:layout_marginBottom="12dp"
+            android:background="#FFFFFF"
+            android:hint="Digite ou selecione um aluno"
+            android:textColor="#000000"
+            android:textColorHint="#888888" />
 
-        <!-- 📧 Email preenchido automaticamente -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:layout_marginTop="16dp" />
+            android:textColor="#FFFFFF" />
 
         <EditText
             android:id="@+id/editEmailAluno"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="39dp"
+            android:layout_marginBottom="16dp"
+            android:background="#FFFFFF"
+            android:enabled="false"
             android:hint="Email do aluno"
-            android:enabled="false" />
+            android:textColor="#000000"
+            android:textColorHint="#888888" />
 
-        <!-- 🗓 Campo para data da aula -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Data da Aula"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/editDataAula"
+        <LinearLayout
+            android:id="@+id/layoutDataAula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Clique para selecionar a data"
-            android:focusable="false"
-            android:inputType="none"
-            android:background="@android:drawable/edit_text" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <!-- 👤 Tipo de aluno -->
+            <TextView
+                android:id="@+id/labelDataAula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data da Aula"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/editDataAula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Clique para selecionar a data"
+                android:focusable="false"
+                android:inputType="none"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:background="#FFFFFF" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tipo de Aluno"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="16dp" />
 
         <RadioGroup
@@ -73,21 +90,24 @@
                 android:id="@+id/radioDiario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Diário" />
+                android:text="Diário"
+                android:textColor="#FFFFFF" />
 
             <RadioButton
                 android:id="@+id/radioMensal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mensal" />
+                android:text="Mensal"
+                android:textColor="#FFFFFF"
+                android:layout_marginStart="24dp" />
         </RadioGroup>
 
-        <!-- ⏰ Label e horário do aluno diário -->
         <TextView
             android:id="@+id/labelHoraDiaria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Horário da Aula"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="12dp"
             android:visibility="gone" />
 
@@ -98,20 +118,21 @@
             android:hint="Ex: 10:00"
             android:inputType="none"
             android:focusable="false"
-            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#888888"
+            android:background="#FFFFFF"
             android:visibility="gone" />
 
-        <!-- 🔁 Label de recorrência -->
         <TextView
             android:id="@+id/txtLabelRecorrencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Horários fixos semanais"
             android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="24dp"
             android:visibility="gone" />
 
-        <!-- 📅 Tabela de dias da semana com horário -->
         <TableLayout
             android:id="@+id/tabelaRecorrencia"
             android:layout_width="match_parent"
@@ -120,72 +141,84 @@
             android:visibility="gone">
 
             <TableRow>
-                <TextView android:text="Segunda" />
+                <TextView android:text="Segunda" android:textColor="#FFFFFF"/>
                 <EditText
                     android:id="@+id/editHoraSeg"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="#FFFFFF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView android:text="Terça" />
+                <TextView android:text="Terça" android:textColor="#FFFFFF"/>
                 <EditText
                     android:id="@+id/editHoraTer"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="#FFFFFF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView android:text="Quarta" />
+                <TextView android:text="Quarta" android:textColor="#FFFFFF"/>
                 <EditText
                     android:id="@+id/editHoraQua"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="#FFFFFF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView android:text="Quinta" />
+                <TextView android:text="Quinta" android:textColor="#FFFFFF"/>
                 <EditText
                     android:id="@+id/editHoraQui"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="#FFFFFF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow>
-                <TextView android:text="Sexta" />
+                <TextView android:text="Sexta" android:textColor="#FFFFFF"/>
                 <EditText
                     android:id="@+id/editHoraSex"
                     android:hint="HH:mm"
                     android:inputType="none"
                     android:focusable="false"
-                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="#FFFFFF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </TableRow>
         </TableLayout>
 
-        <!-- ✅ Botão para salvar -->
         <Button
             android:id="@+id/btnSalvarAula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Salvar Aula"
-            android:layout_marginTop="32dp" />
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_button_rounded_purple" />
     </LinearLayout>
 </ScrollView>

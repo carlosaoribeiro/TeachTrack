@@ -1,35 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="#0B132B"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ListarAulasActivity">
 
-    <!-- 🏷️ Título da tela -->
     <TextView
-        android:id="@+id/txtTituloListagem"
+        android:id="@+id/txtTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Aulas Agendadas"
-        android:textSize="20sp"
+        android:padding="40dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="12dp" />
 
-    <!-- 🔍 Campo de busca -->
+    <!-- Campo de busca -->
     <EditText
-        android:id="@+id/editBuscarAula"
+        android:id="@+id/editBuscar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Search..."
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:drawablePadding="8dp"
+        android:background="@drawable/bg_edittext_rounded"
+        android:paddingHorizontal="16dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A0A0A0"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Filtros -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Buscar por aluno..."
-        android:drawableLeft="@android:drawable/ic_menu_search"
-        android:padding="10dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="12dp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
 
-    <!-- 📋 Lista de aulas -->
+        <Button
+            android:id="@+id/btnTodos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ALL"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7B61FF"
+            android:layout_marginEnd="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <Button
+            android:id="@+id/btnDiario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DAILY"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7B61FF"
+            android:layout_marginEnd="8dp"
+            android:paddingHorizontal="16dp" />
+
+        <Button
+            android:id="@+id/btnMensal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WEEKDAY"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7B61FF"
+            android:paddingHorizontal="16dp" />
+    </LinearLayout>
+
+    <!-- Lista -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerAulas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="12dp"
-        android:paddingBottom="20dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp" />
 </LinearLayout>

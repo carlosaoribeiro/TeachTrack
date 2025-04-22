@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0B132B"
     android:padding="16dp">
 
     <LinearLayout
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- TÍTULO -->
+        <!-- 🧾 TÍTULO -->
         <TextView
             android:id="@+id/txtTitulo"
             android:layout_width="wrap_content"
@@ -17,73 +18,107 @@
             android:layout_gravity="center_horizontal"
             android:paddingBottom="16dp"
             android:text="@string/cadastre_seu_aluno"
+            android:padding="40dp"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#F8F5F5" />
 
+        <!-- 🧑 Nome -->
         <EditText
             android:id="@+id/editNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/nome" />
+            android:hint="@string/nome"
+            android:textColor="#090909"
+            android:textColorHint="#AAAAAA"
+            android:background="@android:drawable/edit_text" />
 
+        <!-- 👨‍🦱 Sobrenome -->
         <EditText
             android:id="@+id/editSobrenome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/sobrenome" />
+            android:hint="@string/sobrenome"
+            android:textColor="#090909"
+            android:textColorHint="#AAAAAA"
+            android:background="@android:drawable/edit_text" />
 
+        <!-- 📱 Telefone -->
         <EditText
             android:id="@+id/editTelefone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/telefone_00_00000_0000"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="#090909"
+            android:textColorHint="#AAAAAA"
+            android:background="@android:drawable/edit_text" />
 
+        <!-- 📧 Email -->
         <EditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="#090909"
+            android:textColorHint="#AAAAAA"
+            android:background="@android:drawable/edit_text" />
 
+        <!-- 🎂 Nascimento -->
         <EditText
             android:id="@+id/editDataNascimento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/data_de_nascimento_dd_mm_aaaa"
-            android:inputType="date" />
+            android:inputType="date"
+            android:textColor="#090909"
+            android:textColorHint="#AAAAAA"
+            android:background="@android:drawable/edit_text" />
 
+        <!-- 📅 Cadastro -->
         <EditText
             android:id="@+id/editDataCadastro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/data_de_cadastro_dd_mm_aaaa"
-            android:inputType="date" />
+            android:inputType="date"
+            android:textColor="#090909"
+            android:textColorHint="#AAAAAA"
+            android:background="@android:drawable/edit_text" />
 
+        <!-- 🎓 Tipo de Aluno -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/tipo_de_aluno" />
+            android:text="@string/tipo_de_aluno"
+            android:textColor="#FFFFFF" />
 
+        <!-- 📌 Checkboxes -->
         <CheckBox
             android:id="@+id/checkMensal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mensal" />
+            android:text="@string/mensal"
+            android:textColor="#FFFFFF" />
 
         <CheckBox
             android:id="@+id/checkDiaria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/di_ria" />
+            android:text="@string/di_ria"
+            android:textColor="#FFFFFF" />
 
+        <!-- ✅ Botão -->
         <Button
             android:id="@+id/btnSalvar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/salvar" />
-
+            android:text="@string/salvar"
+            android:textColor="#0B132B"
+            android:textStyle="bold"
+            android:background="@drawable/bg_button_white" />
     </LinearLayout>
 </ScrollView>
