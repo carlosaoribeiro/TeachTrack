@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#111111">
+    android:background="#0B132B">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,25 +11,26 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- 🧢 Título -->
+        <!-- 🧾 Título -->
         <TextView
             android:id="@+id/txtTituloCadastro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cadastrar-se"
-            android:textSize="36sp"
+            android:text="Criar Conta"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:layout_marginBottom="32dp" />
 
-        <!-- 👤 Nome -->
+        <!-- 🧑 Nome -->
         <EditText
             android:id="@+id/editNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nome completo"
-            android:textColor="#070707"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
             android:textColorHint="#AAAAAA"
             android:background="@android:drawable/edit_text"
             android:layout_marginBottom="16dp" />
@@ -41,44 +42,43 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textColor="#070707"
+            android:textColor="#FFFFFF"
             android:textColorHint="#AAAAAA"
             android:background="@android:drawable/edit_text"
             android:layout_marginBottom="16dp" />
 
-        <!-- 🔐 Senha -->
+        <!-- 🔒 Senha -->
         <EditText
             android:id="@+id/editSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Senha"
             android:inputType="textPassword"
-            android:textColor="#070707"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="16dp" />
-
-        <!-- 🔐 Confirmar senha -->
-        <EditText
-            android:id="@+id/editConfirmarSenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Confirmar senha"
-            android:inputType="textPassword"
-            android:textColor="#070707"
+            android:textColor="#FFFFFF"
             android:textColorHint="#AAAAAA"
             android:background="@android:drawable/edit_text"
             android:layout_marginBottom="24dp" />
 
-        <!-- 🚀 Botão de cadastro -->
+        <!-- ✅ Botão de cadastro -->
         <Button
             android:id="@+id/btnCadastrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cadastrar"
+            android:textColor="#0B132B"
+            android:textStyle="bold"
             android:backgroundTint="#FFFFFF"
-            android:textColor="#111111"
-            android:textStyle="bold" />
+            android:background="@drawable/bg_button_white"
+            android:layout_marginBottom="24dp" />
 
+        <!-- 🔙 Voltar -->
+        <TextView
+            android:id="@+id/txtVoltarLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Já tem conta? Voltar ao login"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_gravity="center" />
     </LinearLayout>
 </ScrollView>

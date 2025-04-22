@@ -2,19 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#111111"
+    android:background="#0B132B"
     android:gravity="center">
 
-    <!-- Container central com logo, texto e loading -->
     <LinearLayout
         android:id="@+id/containerLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:padding="24dp">
 
-        <!-- 🎓 Logo/chapeu -->
+        <!-- 🎓 Logo TeachTrack -->
         <ImageView
             android:id="@+id/logoTeachTrack"
             android:layout_width="150dp"
@@ -23,21 +23,21 @@
             android:contentDescription="@string/app_name"
             android:layout_marginBottom="16dp" />
 
-        <!-- 🏷️ Texto TeachTrack -->
+        <!-- 🏷️ Título -->
         <TextView
             android:id="@+id/textTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TeachTrack"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- ⏳ Loading -->
+        <!-- ⏳ Carregando -->
         <ProgressBar
             android:id="@+id/loadingIndicator"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

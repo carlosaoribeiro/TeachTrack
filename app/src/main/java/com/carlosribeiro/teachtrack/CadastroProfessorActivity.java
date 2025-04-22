@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class CadastroProfessorActivity extends AppCompatActivity {
 
     private EditText editNome, editEmail, editSenha;
     private Button btnCadastrar;
+    private TextView textVoltarLogin;
 
     private FirebaseAuth auth;
     private FirebaseFirestore firestore;
@@ -34,11 +36,17 @@ public class CadastroProfessorActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
         editSenha = findViewById(R.id.editSenha);
         btnCadastrar = findViewById(R.id.btnCadastrar);
+        textVoltarLogin = findViewById(R.id.txtVoltarLogin);
 
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
         btnCadastrar.setOnClickListener(v -> cadastrarUsuario());
+
+        textVoltarLogin.setOnClickListener(v -> {
+            startActivity(new Intent(CadastroProfessorActivity.this, LoginActivity.class));
+            finish(); // Fecha a tela atual
+        });
     }
 
     private void cadastrarUsuario() {
@@ -57,7 +65,6 @@ public class CadastroProfessorActivity extends AppCompatActivity {
                     if (usuario != null) {
                         usuario.sendEmailVerification()
                                 .addOnSuccessListener(unused -> {
-                                    // Salvar nome + email no Firestore
                                     Map<String, Object> dadosUsuario = new HashMap<>();
                                     dadosUsuario.put("nome", nome);
                                     dadosUsuario.put("email", email);
@@ -68,14 +75,12 @@ public class CadastroProfessorActivity extends AppCompatActivity {
 
                                     mostrarDialog("Cadastro realizado com sucesso!\n\nVerifique seu e-mail para ativar sua conta.");
 
-                                    // ✅ Limpa os campos
                                     editNome.setText("");
                                     editEmail.setText("");
                                     editSenha.setText("");
 
                                     auth.signOut();
 
-                                    // ✅ Redireciona para login e finaliza tela atual
                                     startActivity(new Intent(this, LoginActivity.class));
                                     finish();
                                 })

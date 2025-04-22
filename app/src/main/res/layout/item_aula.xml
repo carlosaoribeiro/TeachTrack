@@ -1,34 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:elevation="2dp"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp">
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="4dp"
+    android:backgroundTint="#3A506B"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="16dp">
 
-    <TextView
-        android:id="@+id/txtAluno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome do Aluno"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#000000" />
-
-    <TextView
-        android:id="@+id/txtTipo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tipo"
-        android:textColor="#666666"
-        android:layout_marginTop="4dp" />
-
-    <TableLayout
-        android:id="@+id/tabelaDiasHorarios"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:stretchColumns="1" />
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- 🔄 Troca de RelativeLayout por ConstraintLayout -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Nome do Aluno -->
+            <TextView
+                android:id="@+id/txtAluno"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Nome do Aluno"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnEditar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <!-- Botão Editar -->
+            <TextView
+                android:id="@+id/btnEditar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:textColor="#74C0FC"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/btnExcluir"
+                app:layout_constraintTop_toTopOf="@+id/txtAluno"
+                app:layout_constraintBottom_toBottomOf="@+id/txtAluno"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Botão Excluir -->
+            <ImageButton
+                android:id="@+id/btnExcluir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Excluir"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:tint="@android:color/holo_red_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnEditar"
+                app:layout_constraintBottom_toBottomOf="@+id/btnEditar" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Tipo -->
+        <TextView
+            android:id="@+id/txtTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Diário ou Mensal"
+            android:textColor="#FDCB6E"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp" />
+
+        <!-- Tabela de horários -->
+        <TableLayout
+            android:id="@+id/tabelaDiasHorarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
