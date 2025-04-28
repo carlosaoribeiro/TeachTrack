@@ -63,7 +63,11 @@ public class AgendaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Aula aula = item.getAula();
 
             vh.txtNome.setText(aula.getAluno());
-            vh.txtHora.setText(aula.getHora());
+
+            // 🔥 Merge aqui: exibir formato "data - hora"
+            String dataHoraFormatada = aula.getData() + " - " + aula.getHora();
+            vh.txtHora.setText(dataHoraFormatada);
+
             vh.txtTipo.setText(aula.getTipo());
 
             vh.btnEditar.setOnClickListener(v -> {

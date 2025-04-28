@@ -63,7 +63,7 @@ public class AgendaActivity extends AppCompatActivity {
         configurarDatePicker();
         configurarTimePickers();
         configurarTipoAluno();
-        carregarAlunos(); // 🔄 Agora com listener em tempo real!
+        carregarAlunos();
 
         aulaId = getIntent().getStringExtra("aulaId");
         if (aulaId != null) preencherCamposEdicao();
@@ -116,7 +116,6 @@ public class AgendaActivity extends AppCompatActivity {
         });
     }
 
-    // 🔁 Atualizado para escutar alterações em tempo real
     private void carregarAlunos() {
         db.collection("alunos")
                 .addSnapshotListener((value, error) -> {
@@ -162,7 +161,6 @@ public class AgendaActivity extends AppCompatActivity {
                 String valor = getIntent().getStringExtra("horario_" + entry.getKey());
                 if (valor != null) entry.getValue().setText(valor);
             }
-
         } else {
             radioDiario.setChecked(true);
             editDataAula.setText(getIntent().getStringExtra("data"));
@@ -242,6 +240,27 @@ public class AgendaActivity extends AppCompatActivity {
 
             if (TextUtils.isEmpty(dataAula) || TextUtils.isEmpty(horaDiaria)) {
                 mostrarDialogo("Erro", "Informe a data e o horário da aula.");
+                return;
+            }
+
+            // 🔥 NOVA VALIDAÇÃO PARA HOJE
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            try {
+                Date hoje = sdf.parse(sdf.format(new Date()));
+                Date dataSelecionada = sdf.parse(dataAula);
+
+                if (dataSelecionada != null && dataSelecionada.equals(hoje)) {
+                    Date horaAgora = sdfHora.parse(sdfHora.format(new Date()));
+                    Date horaSelecionada = sdfHora.parse(horaDiaria);
+
+                    if (horaSelecionada != null && horaSelecionada.before(horaAgora)) {
+                        mostrarDialogo("Erro", "Horário inválido. Para o dia de hoje, escolha um horário futuro.");
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                mostrarDialogo("Erro", "Erro ao validar data/hora: " + e.getMessage());
                 return;
             }
 
