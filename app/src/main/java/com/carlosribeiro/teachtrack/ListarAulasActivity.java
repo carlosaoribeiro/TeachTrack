@@ -19,6 +19,7 @@ import com.carlosribeiro.teachtrack.model.ItemAgenda;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -115,10 +116,13 @@ public class ListarAulasActivity extends AppCompatActivity {
         Map<String, List<Aula>> agrupadasPorData = new LinkedHashMap<>();
         listaItens.clear();
 
+        // Pega a data de hoje formatada
+        String dataHoje = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new java.util.Date());
+
         for (Aula aula : todasAulas) {
             boolean atendeFiltro = filtro.equals("Todos") ||
                     (filtro.equals("Mensal") && "Mensal".equalsIgnoreCase(aula.getTipo())) ||
-                    (filtro.equals("Diário") && "Diário".equalsIgnoreCase(aula.getTipo()));
+                    (filtro.equals("Diário") && aula.getData() != null && aula.getData().equals(dataHoje));
 
             boolean atendeBusca = aula.getAluno().toLowerCase(Locale.ROOT).contains(textoBusca);
 

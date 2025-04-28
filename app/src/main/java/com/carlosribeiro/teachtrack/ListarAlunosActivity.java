@@ -86,12 +86,20 @@ public class ListarAlunosActivity extends AppCompatActivity {
                             }
                         }
 
+                        // 🔥 ORDENAR A LISTA DE ALUNOS POR NOME ANTES DE MOSTRAR
+                        listaAlunos.sort((a1, a2) -> {
+                            String nome1 = a1.getNome() != null ? a1.getNome() : "";
+                            String nome2 = a2.getNome() != null ? a2.getNome() : "";
+                            return nome1.compareToIgnoreCase(nome2);
+                        });
+
                         adapter = new AlunoAdapter(listaAlunos);
                         recyclerView.setAdapter(adapter);
                         adapter.setOnAlunoLongClickListener(ListarAlunosActivity.this::abrirCadastro);
                     }
                 });
     }
+
 
     private void abrirCadastro(@Nullable Aluno aluno) {
         Intent intent = new Intent(this, CadastroAlunoActivity.class);
