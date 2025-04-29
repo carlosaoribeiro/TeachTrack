@@ -47,5 +47,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation (libs.firebase.auth)
+    implementation (libs.gson)
 
 }

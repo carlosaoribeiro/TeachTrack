@@ -6,8 +6,8 @@
     android:layout_marginVertical="6dp"
     android:layout_marginHorizontal="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="3dp"
-    android:backgroundTint="#FFFFFF">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#1B2B4B">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,23 +15,25 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- 🧑 Nome do aluno -->
         <TextView
             android:id="@+id/txtNomeAluno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nome do Aluno"
-            android:textColor="#1D3557"
+            android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <!-- ✉️ Email do aluno -->
         <TextView
             android:id="@+id/txtEmailAluno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="email@email.com"
-            android:textColor="#6C757D"
+            android:textColor="#A9B4C2"
             android:textSize="14sp"
-            android:layout_marginTop="2dp" />
+            android:layout_marginTop="4dp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.carlosribeiro.teachtrack.model.Aluno;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -87,12 +88,13 @@ public class AgendaActivity extends AppCompatActivity {
     private void configurarTimePickers() {
         for (EditText campo : Arrays.asList(editHoraDiaria, editHoraSeg, editHoraTer, editHoraQua, editHoraQui, editHoraSex)) {
             campo.setOnClickListener(v -> {
+                final EditText currentField = campo;
                 Calendar cal = Calendar.getInstance();
                 int hora = cal.get(Calendar.HOUR_OF_DAY);
                 int minuto = cal.get(Calendar.MINUTE);
 
                 new TimePickerDialog(this, (view, h, m) -> {
-                    campo.setText(String.format(Locale.US, "%02d:%02d", h, m));
+                    currentField.setText(String.format(Locale.US, "%02d:%02d", h, m));
                 }, hora, minuto, true).show();
             });
         }
@@ -110,14 +112,15 @@ public class AgendaActivity extends AppCompatActivity {
 
             labelHoraDiaria.setVisibility(isDiario ? View.VISIBLE : View.GONE);
             editHoraDiaria.setVisibility(isDiario ? View.VISIBLE : View.GONE);
-
-            labelDataAula.setVisibility(isDiario ? View.VISIBLE : View.GONE);
-            editDataAula.setVisibility(isDiario ? View.VISIBLE : View.GONE);
+            layoutDataAula.setVisibility(isDiario ? View.VISIBLE : View.GONE);
         });
     }
 
     private void carregarAlunos() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         db.collection("alunos")
+                .whereEqualTo("userId", userId)
                 .addSnapshotListener((value, error) -> {
                     if (error != null || value == null) return;
 
@@ -171,6 +174,7 @@ public class AgendaActivity extends AppCompatActivity {
     private void salvarAula() {
         String nomeAluno = autoAluno.getText().toString().trim();
         String emailAluno = editEmailAluno.getText().toString().trim();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (TextUtils.isEmpty(nomeAluno)) {
             mostrarDialogo("Erro", "Informe o nome do aluno.");
@@ -178,110 +182,74 @@ public class AgendaActivity extends AppCompatActivity {
         }
 
         if (radioMensal.isChecked()) {
-            Map<String, String> horarios = new HashMap<>();
-
-            if (!TextUtils.isEmpty(editHoraSeg.getText())) horarios.put("segunda", editHoraSeg.getText().toString());
-            if (!TextUtils.isEmpty(editHoraTer.getText())) horarios.put("terca", editHoraTer.getText().toString());
-            if (!TextUtils.isEmpty(editHoraQua.getText())) horarios.put("quarta", editHoraQua.getText().toString());
-            if (!TextUtils.isEmpty(editHoraQui.getText())) horarios.put("quinta", editHoraQui.getText().toString());
-            if (!TextUtils.isEmpty(editHoraSex.getText())) horarios.put("sexta", editHoraSex.getText().toString());
-
-            if (horarios.isEmpty()) {
-                mostrarDialogo("Erro", "Informe ao menos um horário semanal.");
-                return;
-            }
-
-            Calendar hoje = Calendar.getInstance();
-            hoje.set(Calendar.HOUR_OF_DAY, 0);
-            hoje.set(Calendar.MINUTE, 0);
-            hoje.set(Calendar.SECOND, 0);
-            hoje.set(Calendar.MILLISECOND, 0);
-
-            Map<String, Integer> mapaIndices = new HashMap<>();
-            mapaIndices.put("segunda", Calendar.MONDAY);
-            mapaIndices.put("terca", Calendar.TUESDAY);
-            mapaIndices.put("quarta", Calendar.WEDNESDAY);
-            mapaIndices.put("quinta", Calendar.THURSDAY);
-            mapaIndices.put("sexta", Calendar.FRIDAY);
-
-            List<Map<String, Object>> aulasParaSalvar = new ArrayList<>();
-
-            for (int i = 0; i < 28; i++) {
-                Calendar data = (Calendar) hoje.clone();
-                data.add(Calendar.DAY_OF_YEAR, i);
-
-                for (Map.Entry<String, String> entry : horarios.entrySet()) {
-                    String dia = entry.getKey();
-                    String hora = entry.getValue();
-                    int diaSemana = mapaIndices.get(dia);
-
-                    if (data.get(Calendar.DAY_OF_WEEK) == diaSemana) {
-                        Map<String, Object> aula = new HashMap<>();
-                        aula.put("aluno", nomeAluno);
-                        aula.put("email", emailAluno);
-                        aula.put("tipo", "Mensal");
-                        aula.put("data", new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(data.getTime()));
-                        aula.put("hora", hora);
-                        aula.put("diaSemana", dia);
-                        aulasParaSalvar.add(aula);
-                    }
-                }
-            }
-
-            for (Map<String, Object> aula : aulasParaSalvar) {
-                db.collection("aulas").add(aula);
-            }
-
-            mostrarDialogo("Sucesso", "Aulas mensais salvas para as próximas 4 semanas!");
-
+            salvarMensal(nomeAluno, emailAluno, userId);
         } else {
-            String dataAula = editDataAula.getText().toString().trim();
-            String horaDiaria = editHoraDiaria.getText().toString().trim();
+            salvarDiario(nomeAluno, emailAluno, userId);
+        }
+    }
 
-            if (TextUtils.isEmpty(dataAula) || TextUtils.isEmpty(horaDiaria)) {
-                mostrarDialogo("Erro", "Informe a data e o horário da aula.");
-                return;
-            }
+    private void salvarMensal(String nomeAluno, String emailAluno, String userId) {
+        Map<String, String> horarios = new HashMap<>();
+        if (!TextUtils.isEmpty(editHoraSeg.getText())) horarios.put("segunda", editHoraSeg.getText().toString());
+        if (!TextUtils.isEmpty(editHoraTer.getText())) horarios.put("terca", editHoraTer.getText().toString());
+        if (!TextUtils.isEmpty(editHoraQua.getText())) horarios.put("quarta", editHoraQua.getText().toString());
+        if (!TextUtils.isEmpty(editHoraQui.getText())) horarios.put("quinta", editHoraQui.getText().toString());
+        if (!TextUtils.isEmpty(editHoraSex.getText())) horarios.put("sexta", editHoraSex.getText().toString());
 
-            // 🔥 NOVA VALIDAÇÃO PARA HOJE
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            try {
-                Date hoje = sdf.parse(sdf.format(new Date()));
-                Date dataSelecionada = sdf.parse(dataAula);
+        if (horarios.isEmpty()) {
+            mostrarDialogo("Erro", "Informe ao menos um horário semanal.");
+            return;
+        }
 
-                if (dataSelecionada != null && dataSelecionada.equals(hoje)) {
-                    Date horaAgora = sdfHora.parse(sdfHora.format(new Date()));
-                    Date horaSelecionada = sdfHora.parse(horaDiaria);
+        Calendar hoje = Calendar.getInstance();
+        Map<String, Integer> mapaIndices = new HashMap<>();
+        mapaIndices.put("segunda", Calendar.MONDAY);
+        mapaIndices.put("terca", Calendar.TUESDAY);
+        mapaIndices.put("quarta", Calendar.WEDNESDAY);
+        mapaIndices.put("quinta", Calendar.THURSDAY);
+        mapaIndices.put("sexta", Calendar.FRIDAY);
 
-                    if (horaSelecionada != null && horaSelecionada.before(horaAgora)) {
-                        mostrarDialogo("Erro", "Horário inválido. Para o dia de hoje, escolha um horário futuro.");
-                        return;
-                    }
+        for (int i = 0; i < 28; i++) {
+            Calendar data = (Calendar) hoje.clone();
+            data.add(Calendar.DAY_OF_YEAR, i);
+
+            for (Map.Entry<String, String> entry : horarios.entrySet()) {
+                if (data.get(Calendar.DAY_OF_WEEK) == mapaIndices.get(entry.getKey())) {
+                    String dataFormatada = new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(data.getTime());
+                    Map<String, Object> aula = new HashMap<>();
+                    aula.put("aluno", nomeAluno); // ✅ corrigido
+                    aula.put("email", emailAluno); // ✅ corrigido
+                    aula.put("tipo", "Mensal");
+                    aula.put("data", dataFormatada);
+                    aula.put("hora", entry.getValue());
+                    aula.put("userId", userId);
+                    db.collection("aulas").add(aula);
                 }
-            } catch (Exception e) {
-                mostrarDialogo("Erro", "Erro ao validar data/hora: " + e.getMessage());
-                return;
-            }
-
-            Map<String, Object> dados = new HashMap<>();
-            dados.put("aluno", nomeAluno);
-            dados.put("email", emailAluno);
-            dados.put("tipo", "Diário");
-            dados.put("data", dataAula);
-            dados.put("hora", horaDiaria);
-
-            if (aulaId != null) {
-                db.collection("aulas").document(aulaId)
-                        .set(dados)
-                        .addOnSuccessListener(aVoid -> mostrarDialogo("Sucesso", "Aula atualizada com sucesso!"))
-                        .addOnFailureListener(e -> mostrarDialogo("Erro", "Falha ao atualizar aula: " + e.getMessage()));
-            } else {
-                db.collection("aulas").add(dados)
-                        .addOnSuccessListener(doc -> mostrarDialogo("Sucesso", "Aula salva com sucesso!"))
-                        .addOnFailureListener(e -> mostrarDialogo("Erro", "Erro ao salvar aula: " + e.getMessage()));
             }
         }
+        mostrarDialogo("Sucesso", "Aulas mensais salvas!");
+    }
+
+    private void salvarDiario(String nomeAluno, String emailAluno, String userId) {
+        String dataAula = editDataAula.getText().toString().trim();
+        String horaDiaria = editHoraDiaria.getText().toString().trim();
+
+        if (TextUtils.isEmpty(dataAula) || TextUtils.isEmpty(horaDiaria)) {
+            mostrarDialogo("Erro", "Informe a data e o horário.");
+            return;
+        }
+
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("aluno", nomeAluno); // ✅ corrigido
+        dados.put("email", emailAluno); // ✅ corrigido
+        dados.put("hora", horaDiaria);
+        dados.put("tipo", "Diário");
+        dados.put("data", dataAula);
+        dados.put("userId", userId);
+
+        db.collection("aulas").add(dados)
+                .addOnSuccessListener(doc -> mostrarDialogo("Sucesso", "Aula diária salva!"))
+                .addOnFailureListener(e -> mostrarDialogo("Erro", "Falha ao salvar aula."));
     }
 
     private void mostrarDialogo(String titulo, String mensagem) {

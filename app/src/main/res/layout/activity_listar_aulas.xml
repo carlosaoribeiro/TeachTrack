@@ -30,7 +30,7 @@
         android:drawablePadding="8dp"
         android:background="@drawable/bg_edittext_rounded"
         android:paddingHorizontal="16dp"
-        android:textColor="#FFFFFF"
+        android:textColor="#0D0C0C"
         android:textColorHint="#A0A0A0"
         android:layout_marginBottom="12dp" />
 
@@ -45,31 +45,38 @@
         <Button
             android:id="@+id/btnTodos"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ALL"
+            android:layout_height="48dp"
+            android:text="Todas"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7B61FF"
             android:layout_marginEnd="8dp"
-            android:paddingHorizontal="16dp" />
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_button_rounded_purple"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnDiario"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DAILY"
+            android:layout_height="48dp"
+            android:text="Hoje"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7B61FF"
             android:layout_marginEnd="8dp"
-            android:paddingHorizontal="16dp" />
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_button_rounded_purple"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnMensal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="WEEKDAY"
+            android:layout_height="48dp"
+            android:text="Semana"
             android:textColor="#FFFFFF"
             android:backgroundTint="#7B61FF"
-            android:paddingHorizontal="16dp" />
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/bg_button_rounded_purple"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <!-- Lista -->

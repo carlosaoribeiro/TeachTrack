@@ -7,21 +7,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp"
+        android:padding="32dp"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:minHeight="700dp">
 
         <!-- 🧢 Título -->
         <TextView
             android:id="@+id/txtTituloLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="40dp"
             android:text="TeachTrack"
-            android:textSize="40sp"
+            android:textSize="36sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="32dp" />
+            android:textColor="#FFFFFF" />
 
         <!-- ✉️ Email -->
         <EditText
@@ -33,8 +34,8 @@
             android:textColor="#FFFFFF"
             android:textColorHint="#A9B4C2"
             android:background="@drawable/bg_input"
-            android:layout_marginBottom="16dp"
-            android:paddingHorizontal="16dp" />
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 🔒 Senha -->
         <EditText
@@ -46,8 +47,8 @@
             android:textColor="#FFFFFF"
             android:textColorHint="#A9B4C2"
             android:background="@drawable/bg_input"
-            android:layout_marginBottom="16dp"
-            android:paddingHorizontal="16dp" />
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp" />
 
         <!-- 🔓 Esqueci a senha -->
         <TextView
@@ -55,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Esqueci a senha"
-            android:textColor="#FFFFFF"
+            android:textColor="#AAAAAA"
             android:textSize="14sp"
             android:layout_gravity="end"
             android:layout_marginBottom="24dp" />
@@ -68,7 +69,8 @@
             android:text="Entrar"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:background="@drawable/bg_button_white"
+            android:backgroundTint="#8E44AD"
+            android:background="@null"
             android:layout_marginBottom="24dp" />
 
         <!-- 🆕 Cadastrar-se -->
