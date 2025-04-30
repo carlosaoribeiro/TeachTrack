@@ -129,20 +129,6 @@
             android:orientation="horizontal"
             android:layout_marginBottom="24dp">
 
-            <CheckBox
-                android:id="@+id/checkMensal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mensal"
-                android:textColor="#FFFFFF" />
-
-            <CheckBox
-                android:id="@+id/checkDiaria"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/di_ria"
-                android:textColor="#FFFFFF"
-                android:layout_marginStart="32dp" />
         </LinearLayout>
 
         <!-- ✅ Botão -->

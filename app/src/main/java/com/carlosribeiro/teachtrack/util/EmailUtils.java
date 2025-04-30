@@ -2,6 +2,7 @@ package com.carlosribeiro.teachtrack.util;
 
 import android.util.Base64;
 import android.util.Log;
+import com.carlosribeiro.teachtrack.BuildConfig;
 
 import com.google.gson.Gson;
 
@@ -19,16 +20,22 @@ public class EmailUtils {
 
     private static final String FROM_EMAIL = "crls.ribeiro.dev@gmail.com";
     private static final String FROM_NAME = "TeachTrack App";
-    private static final String API_KEY = "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";
+
+    /**
+     * Recupera a chave da SendGrid de forma segura via variável de ambiente (BuildConfig).
+     * Isso exige que você configure no `build.gradle`:
+     *
+     * buildConfigField("String", "SENDGRID_KEY", "\"SUA_CHAVE_AQUI\"")
+     */
+    private static final String API_KEY = com.carlosribeiro.teachtrack.BuildConfig.SENDGRID_KEY;
+
 
     public static void enviarConvitePorEmail(String emailAluno, String nomeAluno, String data, String hora) {
         new Thread(() -> {
             try {
-                // 1. Criar conteúdo ICS
                 String conteudoICS = gerarICS(nomeAluno, data, hora);
                 String base64ICS = Base64.encodeToString(conteudoICS.getBytes(), Base64.NO_WRAP);
 
-                // 2. Criar o JSON payload
                 String mensagem = "Olá, segue em anexo o convite da aula.";
                 SendGridPayload payload = new SendGridPayload(
                         FROM_EMAIL,
@@ -40,11 +47,10 @@ public class EmailUtils {
 
                 String json = new Gson().toJson(payload);
 
-                // 3. Enviar para API SendGrid
                 URL url = new URL("https://api.sendgrid.com/v3/mail/send");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
-                conn.setRequestProperty("Authorization", API_KEY);
+                conn.setRequestProperty("Authorization", "Bearer " + API_KEY); // ✅ Correto
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
 
@@ -64,7 +70,6 @@ public class EmailUtils {
 
     private static String gerarICS(String nomeAluno, String data, String hora) {
         try {
-            // 🧠 Parse da data e hora para formato ICS
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US);
             Date dataHora = sdf.parse(data + " " + hora);
 
