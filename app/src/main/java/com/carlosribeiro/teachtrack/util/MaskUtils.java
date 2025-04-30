@@ -8,36 +8,84 @@ public class MaskUtils {
 
     public static void applyDateMask(EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {
-            private String current = "";
-            private final String ddmmyyyy = "DDMMYYYY";
             private boolean isUpdating;
+            private String oldText = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isUpdating) return;
-                isUpdating = true;
+                String str = s.toString().replaceAll("[^\\d]", "");
 
-                String clean = s.toString().replaceAll("[^\\d]", "");
-
-                StringBuilder result = new StringBuilder();
-                int i = 0;
-                for (char m : ddmmyyyy.toCharArray()) {
-                    if (i >= clean.length()) break;
-                    if (m == 'D' || m == 'M' || m == 'Y') {
-                        result.append(clean.charAt(i));
-                        i++;
+                String formatted = "";
+                if (!isUpdating) {
+                    if (str.length() > 2) {
+                        formatted += str.substring(0, 2) + "/";
+                        if (str.length() > 4) {
+                            formatted += str.substring(2, 4) + "/";
+                            if (str.length() > 8) {
+                                formatted += str.substring(4, 8);
+                            } else {
+                                formatted += str.substring(4);
+                            }
+                        } else {
+                            formatted += str.substring(2);
+                        }
+                    } else {
+                        formatted = str;
                     }
-                    if (i == 2 || i == 4) result.append('/');
-                }
 
-                current = result.toString();
-                editText.setText(current);
-                editText.setSelection(current.length());
-                isUpdating = false;
+                    isUpdating = true;
+                    editText.setText(formatted);
+                    editText.setSelection(formatted.length());
+                    isUpdating = false;
+                }
             }
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    // ✅ NOVO método para máscara de telefone: (99) 99999-9999
+    public static void applyPhoneMask(EditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
+            private boolean isUpdating;
+            private String oldText = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (isUpdating) {
+                    isUpdating = false;
+                    return;
+                }
+
+                String str = s.toString().replaceAll("[^\\d]", "");
+                StringBuilder formatted = new StringBuilder();
+
+                int length = str.length();
+
+                if (length > 0) {
+                    formatted.append("(").append(str.substring(0, Math.min(2, length)));
+                }
+                if (length >= 3) {
+                    formatted.append(") ").append(str.substring(2, Math.min(7, length)));
+                }
+                if (length >= 8) {
+                    formatted.append("-").append(str.substring(7, Math.min(11, length)));
+                }
+
+                isUpdating = true;
+                editText.setText(formatted.toString());
+                editText.setSelection(editText.getText().length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
     }
 }

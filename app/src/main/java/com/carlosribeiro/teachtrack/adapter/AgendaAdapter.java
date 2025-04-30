@@ -57,18 +57,19 @@ public class AgendaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         if (item.getTipo() == ItemAgenda.TIPO_CABECALHO) {
             CabecalhoViewHolder vh = (CabecalhoViewHolder) holder;
-            vh.txtData.setText(item.getData());
+            vh.txtData.setText(item.getData() != null ? item.getData() : "Data não definida");
         } else {
             AulaViewHolder vh = (AulaViewHolder) holder;
             Aula aula = item.getAula();
 
-            vh.txtNome.setText(aula.getAluno());
+            String nomeAluno = aula.getAluno() != null ? aula.getAluno() : "(Sem nome)";
+            String data = aula.getData() != null ? aula.getData() : "(Sem data)";
+            String hora = aula.getHora() != null ? aula.getHora() : "(Sem hora)";
+            String tipo = aula.getTipo() != null ? aula.getTipo() : "(Sem tipo)";
 
-            // 🔥 Merge aqui: exibir formato "data - hora"
-            String dataHoraFormatada = aula.getData() + " - " + aula.getHora();
-            vh.txtHora.setText(dataHoraFormatada);
-
-            vh.txtTipo.setText(aula.getTipo());
+            vh.txtNome.setText(nomeAluno);
+            vh.txtHora.setText(data + " - " + hora);
+            vh.txtTipo.setText(tipo);
 
             vh.btnEditar.setOnClickListener(v -> {
                 if (listener != null) listener.onEditar(aula);

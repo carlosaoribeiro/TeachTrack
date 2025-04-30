@@ -3,119 +3,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0B132B"
-    android:padding="16dp">
+    android:padding="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-        <!-- 🧾 TÍTULO -->
+        <!-- 🧢 Nome do App -->
+        <TextView
+            android:id="@+id/txtAppNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TeachTrack"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 🧾 Subtítulo -->
         <TextView
             android:id="@+id/txtTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="16dp"
             android:text="@string/cadastre_seu_aluno"
-            android:padding="40dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#F8F5F5" />
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="32dp" />
 
         <!-- 🧑 Nome -->
         <EditText
             android:id="@+id/editNome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="@string/nome"
-            android:textColor="#090909"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9B4C2"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 👨‍🦱 Sobrenome -->
         <EditText
             android:id="@+id/editSobrenome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="@string/sobrenome"
-            android:textColor="#090909"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9B4C2"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 📱 Telefone -->
         <EditText
             android:id="@+id/editTelefone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="@string/telefone_00_00000_0000"
             android:inputType="phone"
-            android:textColor="#090909"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9B4C2"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 📧 Email -->
         <EditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textColor="#090909"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9B4C2"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 🎂 Nascimento -->
         <EditText
             android:id="@+id/editDataNascimento"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="@string/data_de_nascimento_dd_mm_aaaa"
             android:inputType="date"
-            android:textColor="#090909"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9B4C2"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 📅 Cadastro -->
         <EditText
             android:id="@+id/editDataCadastro"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="@string/data_de_cadastro_dd_mm_aaaa"
             android:inputType="date"
-            android:textColor="#090909"
-            android:textColorHint="#AAAAAA"
-            android:background="@android:drawable/edit_text" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#A9B4C2"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- 🎓 Tipo de Aluno -->
-        <TextView
-            android:layout_width="wrap_content"
+
+        <Spinner
+            android:id="@+id/spinnerTipoAluno"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/tipo_de_aluno"
+            android:background="@drawable/bg_input"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
             android:textColor="#FFFFFF" />
+
 
         <!-- 📌 Checkboxes -->
-        <CheckBox
-            android:id="@+id/checkMensal"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mensal"
-            android:textColor="#FFFFFF" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
 
-        <CheckBox
-            android:id="@+id/checkDiaria"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/di_ria"
-            android:textColor="#FFFFFF" />
+        </LinearLayout>
 
         <!-- ✅ Botão -->
         <Button
             android:id="@+id/btnSalvar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_height="50dp"
             android:text="@string/salvar"
             android:textColor="#0B132B"
             android:textStyle="bold"

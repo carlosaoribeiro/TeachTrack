@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -16,17 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.carlosribeiro.teachtrack.adapter.AgendaAdapter;
 import com.carlosribeiro.teachtrack.model.Aula;
 import com.carlosribeiro.teachtrack.model.ItemAgenda;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class ListarAulasActivity extends AppCompatActivity {
 
@@ -37,13 +31,15 @@ public class ListarAulasActivity extends AppCompatActivity {
 
     private EditText editBuscar;
     private Button btnTodos, btnDiario, btnMensal;
-
     private List<Aula> todasAulas = new ArrayList<>();
+    private String userIdAtual;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listar_aulas);
+
+        userIdAtual = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         recyclerView = findViewById(R.id.recyclerAulas);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -66,7 +62,8 @@ public class ListarAulasActivity extends AppCompatActivity {
 
             @Override
             public void onExcluir(Aula aula) {
-                db.collection("aulas").document(aula.getId()).delete();
+                db.collection("aulas").document(aula.getId()).delete()
+                        .addOnSuccessListener(unused -> carregarAulas());
             }
         });
 
@@ -96,6 +93,7 @@ public class ListarAulasActivity extends AppCompatActivity {
 
     private void carregarAulas() {
         db.collection("aulas")
+                .whereEqualTo("userId", userIdAtual)
                 .orderBy("data")
                 .addSnapshotListener((snapshots, error) -> {
                     if (error != null || snapshots == null) return;
@@ -112,25 +110,24 @@ public class ListarAulasActivity extends AppCompatActivity {
     }
 
     private void filtrarLista(String filtro) {
-        String textoBusca = editBuscar.getText().toString().toLowerCase(Locale.ROOT);
+        String textoBusca = editBuscar.getText() != null ? editBuscar.getText().toString().toLowerCase(Locale.ROOT) : "";
         Map<String, List<Aula>> agrupadasPorData = new LinkedHashMap<>();
         listaItens.clear();
 
-        // Pega a data de hoje formatada
-        String dataHoje = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new java.util.Date());
+        String dataHoje = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
 
         for (Aula aula : todasAulas) {
-            boolean atendeFiltro = filtro.equals("Todos") ||
+            boolean atendeFiltro = filtro.equals("Todos") || filtro.equals("Buscar") ||
                     (filtro.equals("Mensal") && "Mensal".equalsIgnoreCase(aula.getTipo())) ||
                     (filtro.equals("Diário") && aula.getData() != null && aula.getData().equals(dataHoje));
 
-            boolean atendeBusca = aula.getAluno().toLowerCase(Locale.ROOT).contains(textoBusca);
+            String nomeAluno = aula.getAluno() != null ? aula.getAluno() : "";
+            boolean atendeBusca = nomeAluno.toLowerCase(Locale.ROOT).contains(textoBusca);
 
             if (atendeFiltro && atendeBusca) {
-                if (!agrupadasPorData.containsKey(aula.getData())) {
-                    agrupadasPorData.put(aula.getData(), new ArrayList<>());
-                }
-                agrupadasPorData.get(aula.getData()).add(aula);
+                agrupadasPorData
+                        .computeIfAbsent(aula.getData() != null ? aula.getData() : "Data não definida", k -> new ArrayList<>())
+                        .add(aula);
             }
         }
 
@@ -140,7 +137,10 @@ public class ListarAulasActivity extends AppCompatActivity {
 
             listaItens.add(new ItemAgenda(data));
 
-            Collections.sort(aulasDoDia, Comparator.comparing(Aula::getHora));
+            aulasDoDia.sort(Comparator.comparing(
+                    aula -> aula.getHora() != null ? aula.getHora() : ""
+            ));
+
             for (Aula aula : aulasDoDia) {
                 listaItens.add(new ItemAgenda(aula));
             }
