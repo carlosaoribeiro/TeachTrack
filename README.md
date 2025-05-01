@@ -50,7 +50,7 @@ An Android application to help English teachers manage their student schedules, 
 <div align="center">
 
   <img src="screenshots/bookaclass.png" width="180"/>
-  <img src="screenshots/scheduled_classes.png" width="180"/>
+  <img src="screenshots/scheduledclasses.png" width="180"/>
 
 </div>
 
