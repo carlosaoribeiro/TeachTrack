@@ -9,6 +9,7 @@
     android:background="#0B132B">
 
     <Button
+        style="@style/Button.TeachTrack"
         android:id="@+id/btnAll"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -20,6 +21,7 @@
         android:paddingHorizontal="24dp" />
 
     <Button
+        style="@style/Button.TeachTrack"
         android:id="@+id/btnDaily"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -31,6 +33,7 @@
         android:paddingHorizontal="24dp" />
 
     <Button
+        style="@style/Button.TeachTrack"
         android:id="@+id/btnWeekday"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
