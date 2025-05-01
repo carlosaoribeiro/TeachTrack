@@ -27,7 +27,7 @@ public class EmailUtils {
      *
      * buildConfigField("String", "SENDGRID_KEY", "\"SUA_CHAVE_AQUI\"")
      */
-    private static final String API_KEY = com.carlosribeiro.teachtrack.BuildConfig.SENDGRID_KEY;
+    private static final String API_KEY = BuildConfig.SENDGRID_KEY;
 
 
     public static void enviarConvitePorEmail(String emailAluno, String nomeAluno, String data, String hora) {
