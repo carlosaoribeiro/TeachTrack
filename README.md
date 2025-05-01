@@ -34,6 +34,24 @@ An Android application to help English teachers manage their student schedules, 
 
 ---
 
+
+## 🖼️ App Screenshots
+
+### 🔐 Login
+![Login](screenshots/login.png)
+
+### 👤 Create Account
+![Create Account](screenshots/createaccount.png)
+
+### 🏠 Home Screen
+![Home](screenshots/home.png)
+
+### 📅 Book a Class
+![Book a Class](screenshots/bookaclass.png)
+
+### 📋 Scheduled Classes
+![Scheduled Classes](screenshots/scheduledclasses.png)
+
 ## 🚀 How to Use
 
 1. Install the app on your Android device  
