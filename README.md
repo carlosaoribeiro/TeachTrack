@@ -37,20 +37,23 @@ An Android application to help English teachers manage their student schedules, 
 
 ## 🖼️ App Screenshots
 
+## 🖼️ App Screenshots
+
 <div align="center">
 
-  <img src="screenshots/login.png" width="200"/>
-  <img src="screenshots/createaccount.png" width="200"/>
-  <img src="screenshots/home.png" width="200"/>
+  <img src="screenshots/login.png" width="180"/>
+  <img src="screenshots/createaccount.png" width="180"/>
+  <img src="screenshots/home.png" width="180"/>
 
 </div>
 
 <div align="center">
 
-  <img src="screenshots/bookaclass.png" width="200"/>
-  <img src="screenshots/scheduled_classes.png" width="200"/>
+  <img src="screenshots/bookaclass.png" width="180"/>
+  <img src="screenshots/scheduled_classes.png" width="180"/>
 
 </div>
+
 
 ## 🚀 How to Use
 
