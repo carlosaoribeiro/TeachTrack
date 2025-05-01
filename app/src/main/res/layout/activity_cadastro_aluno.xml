@@ -133,11 +133,12 @@
 
         <!-- ✅ Botão -->
         <Button
+            style="@style/Button.TeachTrack"
             android:id="@+id/btnSalvar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="@string/salvar"
-            android:textColor="#0B132B"
+            android:textColor="#E5E7ED"
             android:textStyle="bold"
             android:background="@drawable/bg_button_white" />
     </LinearLayout>

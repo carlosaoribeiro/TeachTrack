@@ -29,6 +29,7 @@
                 <Button
                     android:id="@+id/btnAgendarAula"
                     android:layout_width="match_parent"
+                    style="@style/Button.TeachTrack"
                     android:layout_height="50dp"
                     android:text="Agendar Aula"
                     android:background="@drawable/bg_button_white"
@@ -40,6 +41,7 @@
                 <Button
                     android:id="@+id/btnListarAlunos"
                     android:layout_width="match_parent"
+                    style="@style/Button.TeachTrack"
                     android:layout_height="50dp"
                     android:text="Listar Alunos"
                     android:background="@drawable/bg_button_white"
@@ -50,6 +52,7 @@
                 <!-- 📋 Botão: Ver Aulas Agendadas -->
                 <Button
                     android:id="@+id/btnVerAulas"
+                    style="@style/Button.TeachTrack"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:text="Ver Aulas Agendadas"

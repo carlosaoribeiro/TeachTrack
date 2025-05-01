@@ -44,6 +44,7 @@
 
         <Button
             android:id="@+id/btnTodos"
+            style="@style/Button.TeachTrack"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:text="Todas"
@@ -57,6 +58,7 @@
         <Button
             android:id="@+id/btnDiario"
             android:layout_width="wrap_content"
+            style="@style/Button.TeachTrack"
             android:layout_height="48dp"
             android:text="Hoje"
             android:textColor="#FFFFFF"
@@ -68,6 +70,7 @@
 
         <Button
             android:id="@+id/btnMensal"
+            style="@style/Button.TeachTrack"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:text="Semana"
