@@ -1,6 +1,6 @@
 # 🎓 TeachTrack
 
-An Android application to help English teachers manage their student schedules, including class registrations, recurring lessons, and Firebase integration.
+An Android application to help English teachers manage their student schedules, including class registrations, recurring lessons, Firebase integration, and a visually refined experience.
 
 ---
 
@@ -8,14 +8,16 @@ An Android application to help English teachers manage their student schedules, 
 
 - 🧑‍🏫 Register and manage students with personal and contact information  
 - 🗓️ Schedule daily or recurring weekly classes  
-- 🔁 Automatically create class recurrences for monthly students  
+- 🔁 Automatically create class recurrences for monthly students (next 4 weeks)  
 - 🔍 Search for students by name with autocomplete  
 - ✉️ Auto-fill student email when selected  
 - 📅 Native date picker for scheduling  
 - 🧮 Table layout for setting fixed weekly class times  
-- 🧾 List of scheduled classes with search and filtering  
+- 📋 List of scheduled classes grouped and sorted by real dates  
+- 🧾 Cards for each class with student name, date, time and delete/edit buttons  
+- 🧠 Long-press (4 seconds) on a card to enter edit mode  
 - 📤 Stores all data in Firebase Firestore  
-- 🧠 Long-press (4 seconds) on a card to enter edit mode (WIP)  
+- 🌙 Modern dark theme with rounded buttons and clean layout  
 
 ---
 
@@ -24,30 +26,37 @@ An Android application to help English teachers manage their student schedules, 
 - Android Studio (recommended: Hedgehog or newer)  
 - Minimum Android SDK: 24  
 - Firebase Firestore enabled in your Firebase project  
+- Firebase Authentication enabled (email/password)  
 - Permissions required:
   - `INTERNET`
   - `ACCESS_NETWORK_STATE`
+  - `ACCESS_COARSE_LOCATION`
 
 ---
 
 ## 🚀 How to Use
 
 1. Install the app on your Android device  
-2. Register a student in the **Student Registration** screen  
-3. Go to **Schedule** and select a student  
-4. Choose the class type: Daily or Monthly  
-5. Select the date or define weekly recurrence times  
-6. View all scheduled classes in the **Classes** screen  
+2. Register a user and log in  
+3. Add students from the **Student Registration** screen  
+4. Schedule a class in **Agenda**:
+   - Select the student  
+   - Choose type: Daily or Monthly  
+   - Pick a date or set weekly recurrence  
+5. View and manage scheduled classes in the **Classes** screen  
 
 ---
 
 ## 🧱 App Screens
 
-- `MainActivity`: Main menu  
+- `SplashActivity`: App startup screen  
+- `LoginActivity`: Firebase login  
+- `CadastroUsuarioActivity`: Firebase signup  
+- `MainActivity`: Main menu (navigation drawer)  
 - `CadastroAlunoActivity`: Student registration  
-- `ListarAlunosActivity`: Student listing and search  
-- `AgendaActivity`: Schedule classes and manage recurrence  
-- `ListarAulasActivity`: List of scheduled classes with filters  
+- `ListarAlunosActivity`: List and search students  
+- `AgendaActivity`: Schedule and edit classes  
+- `ListarAulasActivity`: List of scheduled classes (sorted and grouped)  
 
 ---
 
@@ -56,40 +65,47 @@ An Android application to help English teachers manage their student schedules, 
 - Java  
 - MVVM Architecture  
 - Firebase Firestore  
+- Firebase Authentication  
 - RecyclerView with custom adapters  
 - AutoCompleteTextView  
 - DatePickerDialog  
 - TableLayout  
-- Material Design 3 components  
+- Material Design 3  
+- Dark Theme UI with rounded buttons and structured layout  
 
 ---
 
 ## 📁 Data Structure (Firestore)
 
-- `alunos` (students collection)
-  - `nome`, `sobrenome`, `email`, `tipoAluno`, `dataCadastro`, etc.
-- `aulas` (classes collection)
-  - `aluno`, `email`, `tipo`, `data`, `hora`, `horariosSemana`
+- `usuarios` (users collection)  
+  - `nome`, `email`, `dataCriacao`  
+
+- `alunos` (students collection)  
+  - `nome`, `email`, `tipoAluno`, `dataCadastro`  
+
+- `aulas` (classes collection)  
+  - `aluno`, `email`, `tipo`, `data`, `hora`, `horariosSemana`  
+  - Supports both daily and monthly types, recurring generation for 4 weeks  
 
 ---
 
 ## 📌 Notes
 
-- The project supports both daily and monthly students  
-- Classes are grouped visually by cards  
-- Schedule recurrence only applies to **monthly** students  
-- Currently supports a simple email field; can be expanded with notifications  
+- Monthly students generate recurring classes automatically for 4 weeks  
+- All classes are sorted and grouped by date  
+- Edit or delete directly from each card  
+- Clean UI with improved UX and accessibility  
+- Session management with `SessionManager`  
+- Profile screen displays user info (name, email, signup date)  
 
 ---
 
 ## 🔐 Security & Privacy
 
-All data is securely stored in **Firebase Firestore** and is tied to the user’s own Firebase configuration. No data is shared externally.
+All data is securely stored in **Firebase Firestore**, and authentication is handled via **Firebase Authentication**. Each user only accesses their own data. No external data sharing.
 
 ---
 
 ## 📄 License
 
-This project is for educational use and can be freely adapted for non-commercial purposes. For commercial use, please contact the author.
-
----
+This project is for educational and personal portfolio use. For commercial licensing or contributions, contact the author.
