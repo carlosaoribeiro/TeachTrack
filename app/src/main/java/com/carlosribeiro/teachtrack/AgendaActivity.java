@@ -22,12 +22,13 @@ import java.util.*;
 public class AgendaActivity extends AppCompatActivity {
 
     private AutoCompleteTextView autoAluno;
-    private EditText editEmailAluno, editDataAula, editHoraDiaria;
-    private RadioGroup radioTipoAluno;
-    private RadioButton radioMensal, radioDiario;
-    private TextView txtLabelRecorrencia, labelHoraDiaria;
+    private EditText editEmailAluno, editDataAula, editHoraDiaria, editTema;
+    private Switch switchTipoAluno;
+    private TextView txtLabelRecorrencia, labelHoraDiaria, labelDataAula;
     private LinearLayout layoutDataAula;
-    private TableLayout tabelaRecorrencia;
+    private LinearLayout tabelaRecorrencia;
+
+    private Switch switchSeg, switchTer, switchQua, switchQui, switchSex;
     private EditText editHoraSeg, editHoraTer, editHoraQua, editHoraQui, editHoraSex;
     private Button btnSalvarAula;
 
@@ -48,22 +49,33 @@ public class AgendaActivity extends AppCompatActivity {
         editDataAula = findViewById(R.id.editDataAula);
         layoutDataAula = findViewById(R.id.layoutDataAula);
         editHoraDiaria = findViewById(R.id.editHoraDiaria);
+        editTema = findViewById(R.id.editTema);
+
         labelHoraDiaria = findViewById(R.id.labelHoraDiaria);
-        radioTipoAluno = findViewById(R.id.radioTipoAluno);
-        radioDiario = findViewById(R.id.radioDiario);
-        radioMensal = findViewById(R.id.radioMensal);
+        labelDataAula = findViewById(R.id.labelDataAula);
+        switchTipoAluno = findViewById(R.id.switchTipoAluno);
+
         txtLabelRecorrencia = findViewById(R.id.txtLabelRecorrencia);
         tabelaRecorrencia = findViewById(R.id.tabelaRecorrencia);
+
+        switchSeg = findViewById(R.id.switchSeg);
+        switchTer = findViewById(R.id.switchTer);
+        switchQua = findViewById(R.id.switchQua);
+        switchQui = findViewById(R.id.switchQui);
+        switchSex = findViewById(R.id.switchSex);
+
         editHoraSeg = findViewById(R.id.editHoraSeg);
         editHoraTer = findViewById(R.id.editHoraTer);
         editHoraQua = findViewById(R.id.editHoraQua);
         editHoraQui = findViewById(R.id.editHoraQui);
         editHoraSex = findViewById(R.id.editHoraSex);
+
         btnSalvarAula = findViewById(R.id.btnSalvarAula);
 
         configurarDatePicker();
         configurarTimePickers();
         configurarTipoAluno();
+        configurarSwitchesDias();
         carregarAlunos();
 
         aulaId = getIntent().getStringExtra("aulaId");
@@ -86,33 +98,47 @@ public class AgendaActivity extends AppCompatActivity {
     }
 
     private void configurarTimePickers() {
-        for (EditText campo : Arrays.asList(editHoraDiaria, editHoraSeg, editHoraTer, editHoraQua, editHoraQui, editHoraSex)) {
+        List<EditText> campos = Arrays.asList(
+                editHoraDiaria, editHoraSeg, editHoraTer, editHoraQua, editHoraQui, editHoraSex
+        );
+
+        for (EditText campo : campos) {
             campo.setOnClickListener(v -> {
-                final EditText currentField = campo;
                 Calendar cal = Calendar.getInstance();
                 int hora = cal.get(Calendar.HOUR_OF_DAY);
                 int minuto = cal.get(Calendar.MINUTE);
 
                 new TimePickerDialog(this, (view, h, m) -> {
-                    currentField.setText(String.format(Locale.US, "%02d:%02d", h, m));
+                    campo.setText(String.format(Locale.US, "%02d:%02d", h, m));
                 }, hora, minuto, true).show();
             });
         }
     }
 
     private void configurarTipoAluno() {
-        TextView labelDataAula = findViewById(R.id.labelDataAula);
+        switchTipoAluno.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            txtLabelRecorrencia.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            tabelaRecorrencia.setVisibility(isChecked ? View.VISIBLE : View.GONE);
 
-        radioTipoAluno.setOnCheckedChangeListener((group, checkedId) -> {
-            boolean isMensal = checkedId == R.id.radioMensal;
-            boolean isDiario = checkedId == R.id.radioDiario;
+            labelHoraDiaria.setVisibility(!isChecked ? View.VISIBLE : View.GONE);
+            editHoraDiaria.setVisibility(!isChecked ? View.VISIBLE : View.GONE);
+            layoutDataAula.setVisibility(!isChecked ? View.VISIBLE : View.GONE);
+        });
+    }
 
-            txtLabelRecorrencia.setVisibility(isMensal ? View.VISIBLE : View.GONE);
-            tabelaRecorrencia.setVisibility(isMensal ? View.VISIBLE : View.GONE);
+    private void configurarSwitchesDias() {
+        configurarToggleDia(switchSeg, editHoraSeg);
+        configurarToggleDia(switchTer, editHoraTer);
+        configurarToggleDia(switchQua, editHoraQua);
+        configurarToggleDia(switchQui, editHoraQui);
+        configurarToggleDia(switchSex, editHoraSex);
+    }
 
-            labelHoraDiaria.setVisibility(isDiario ? View.VISIBLE : View.GONE);
-            editHoraDiaria.setVisibility(isDiario ? View.VISIBLE : View.GONE);
-            layoutDataAula.setVisibility(isDiario ? View.VISIBLE : View.GONE);
+    private void configurarToggleDia(Switch sw, EditText campoHora) {
+        campoHora.setEnabled(sw.isChecked());
+        sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            campoHora.setEnabled(isChecked);
+            if (!isChecked) campoHora.setText("");
         });
     }
 
@@ -152,20 +178,9 @@ public class AgendaActivity extends AppCompatActivity {
         String tipo = getIntent().getStringExtra("tipo");
 
         if ("Mensal".equals(tipo)) {
-            radioMensal.setChecked(true);
-            Map<String, EditText> campos = new HashMap<>();
-            campos.put("segunda", editHoraSeg);
-            campos.put("terca", editHoraTer);
-            campos.put("quarta", editHoraQua);
-            campos.put("quinta", editHoraQui);
-            campos.put("sexta", editHoraSex);
-
-            for (Map.Entry<String, EditText> entry : campos.entrySet()) {
-                String valor = getIntent().getStringExtra("horario_" + entry.getKey());
-                if (valor != null) entry.getValue().setText(valor);
-            }
+            switchTipoAluno.setChecked(true);
         } else {
-            radioDiario.setChecked(true);
+            switchTipoAluno.setChecked(false);
             editDataAula.setText(getIntent().getStringExtra("data"));
             editHoraDiaria.setText(getIntent().getStringExtra("hora"));
         }
@@ -174,6 +189,7 @@ public class AgendaActivity extends AppCompatActivity {
     private void salvarAula() {
         String nomeAluno = autoAluno.getText().toString().trim();
         String emailAluno = editEmailAluno.getText().toString().trim();
+        String tema = editTema.getText().toString().trim();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (TextUtils.isEmpty(nomeAluno)) {
@@ -181,23 +197,23 @@ public class AgendaActivity extends AppCompatActivity {
             return;
         }
 
-        if (radioMensal.isChecked()) {
-            salvarMensal(nomeAluno, emailAluno, userId);
+        if (switchTipoAluno.isChecked()) {
+            salvarMensal(nomeAluno, emailAluno, tema, userId);
         } else {
-            salvarDiario(nomeAluno, emailAluno, userId);
+            salvarDiario(nomeAluno, emailAluno, tema, userId);
         }
     }
 
-    private void salvarMensal(String nomeAluno, String emailAluno, String userId) {
+    private void salvarMensal(String nomeAluno, String emailAluno, String tema, String userId) {
         Map<String, String> horarios = new HashMap<>();
-        if (!TextUtils.isEmpty(editHoraSeg.getText())) horarios.put("segunda", editHoraSeg.getText().toString());
-        if (!TextUtils.isEmpty(editHoraTer.getText())) horarios.put("terca", editHoraTer.getText().toString());
-        if (!TextUtils.isEmpty(editHoraQua.getText())) horarios.put("quarta", editHoraQua.getText().toString());
-        if (!TextUtils.isEmpty(editHoraQui.getText())) horarios.put("quinta", editHoraQui.getText().toString());
-        if (!TextUtils.isEmpty(editHoraSex.getText())) horarios.put("sexta", editHoraSex.getText().toString());
+        if (switchSeg.isChecked() && !TextUtils.isEmpty(editHoraSeg.getText())) horarios.put("segunda", editHoraSeg.getText().toString());
+        if (switchTer.isChecked() && !TextUtils.isEmpty(editHoraTer.getText())) horarios.put("terca", editHoraTer.getText().toString());
+        if (switchQua.isChecked() && !TextUtils.isEmpty(editHoraQua.getText())) horarios.put("quarta", editHoraQua.getText().toString());
+        if (switchQui.isChecked() && !TextUtils.isEmpty(editHoraQui.getText())) horarios.put("quinta", editHoraQui.getText().toString());
+        if (switchSex.isChecked() && !TextUtils.isEmpty(editHoraSex.getText())) horarios.put("sexta", editHoraSex.getText().toString());
 
         if (horarios.isEmpty()) {
-            mostrarDialogo("Erro", "Informe ao menos um horário semanal.");
+            mostrarDialogo("Erro", "Ative e informe ao menos um horário semanal.");
             return;
         }
 
@@ -217,8 +233,9 @@ public class AgendaActivity extends AppCompatActivity {
                 if (data.get(Calendar.DAY_OF_WEEK) == mapaIndices.get(entry.getKey())) {
                     String dataFormatada = new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(data.getTime());
                     Map<String, Object> aula = new HashMap<>();
-                    aula.put("aluno", nomeAluno); // ✅ corrigido
-                    aula.put("email", emailAluno); // ✅ corrigido
+                    aula.put("aluno", nomeAluno);
+                    aula.put("email", emailAluno);
+                    aula.put("tema", tema);
                     aula.put("tipo", "Mensal");
                     aula.put("data", dataFormatada);
                     aula.put("hora", entry.getValue());
@@ -227,10 +244,11 @@ public class AgendaActivity extends AppCompatActivity {
                 }
             }
         }
+
         mostrarDialogo("Sucesso", "Aulas mensais salvas!");
     }
 
-    private void salvarDiario(String nomeAluno, String emailAluno, String userId) {
+    private void salvarDiario(String nomeAluno, String emailAluno, String tema, String userId) {
         String dataAula = editDataAula.getText().toString().trim();
         String horaDiaria = editHoraDiaria.getText().toString().trim();
 
@@ -240,11 +258,12 @@ public class AgendaActivity extends AppCompatActivity {
         }
 
         Map<String, Object> dados = new HashMap<>();
-        dados.put("aluno", nomeAluno); // ✅ corrigido
-        dados.put("email", emailAluno); // ✅ corrigido
-        dados.put("hora", horaDiaria);
+        dados.put("aluno", nomeAluno);
+        dados.put("email", emailAluno);
+        dados.put("tema", tema);
         dados.put("tipo", "Diário");
         dados.put("data", dataAula);
+        dados.put("hora", horaDiaria);
         dados.put("userId", userId);
 
         db.collection("aulas").add(dados)

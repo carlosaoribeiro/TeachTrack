@@ -15,7 +15,18 @@ public class Aula implements Serializable {
     private String tipo;
     private String data;
     private String hora;
+
+    private String tema;
+
     private Map<String, String> horariosSemana;
+
+    public String getTema() {
+        return tema;
+    }
+
+    public void setTema(String tema) {
+        this.tema = tema;
+    }
 
     public Aula() {
         // Firestore requires empty constructor
